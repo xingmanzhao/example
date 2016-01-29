@@ -9,21 +9,13 @@
 #import "USCalendarViewController.h"
 #import "USCollectionViewCalendarLayout.h"
 
-#import "USEvent.h"
 // Collection View Reusable Views
 #import "USGridline.h"
 #import "USTimeRowHeaderBackground.h"
-#import "USDayColumnHeaderBackground.h"
 #import "USEventCell.h"
-#import "USDayColumnHeader.h"
 #import "USTimeRowHeader.h"
-#import "USCurrentTimeIndicator.h"
-#import "USCurrentTimeGridline.h"
 
 //#import "UIGestureRecognizer+DraggingAdditions.h"
-
-#import "USData.h"
-#import "USButton.h"
 
 // Added
 #import "USTimeRowBodyBackground.h"
@@ -88,15 +80,9 @@ static NSString * const reuseIdentifier = @"Cell";
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
 #warning Incomplete implementation, return the number of items
     
-//    NSDate *startDateTime = [self collectionView:self.collectionView layout:self.collectionViewCalendarLayout startTimeForItemAtIndexPath:section];
-//    NSDate *endDateTime = [self collectionView:self.collectionView layout:self.collectionViewCalendarLayout endTimeForItemAtIndexPath:section];
-//    NSTimeInterval timeSpan = [self collectionView:self.collectionView layout:self.collectionViewCalendarLayout];
-//    NSTimeInterval timeInterval = [endDateTime timeIntervalSinceDate:startDateTime];
-//    NSInteger numberOfItemsInSection = timeInterval / timeSpan;
-    
     NSInteger numberOfItemsInSection = 0;
     if(self.eventOpenningTimeArray){
-        numberOfItemsInSection = [self.eventOpenningTimeArray count];
+        numberOfItemsInSection = [self.eventOpenningTimeArray count] - 1;
     }
     return numberOfItemsInSection;
 }
@@ -104,27 +90,11 @@ static NSString * const reuseIdentifier = @"Cell";
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     USEventCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:USEventCellReuseIdentifier forIndexPath:indexPath];
    
-    UIEdgeInsets inset = self.collectionView.contentInset;
-    NSLog(@"UIEdgeInsets:%f,%f,%f,%f",inset.top,inset.left,inset.bottom,inset.right);
-    CGPoint contentOffset = self.collectionView.contentOffset;
-    CGSize contentSize = self.collectionView.contentSize;
-    NSLog(@"contentOffset(x,y):%f,%f",contentOffset.x,contentOffset.y);
-    NSLog(@"contentSize(w,h):%f,%f",contentSize.width,contentSize.height);
-    
-    UIEdgeInsets contentMargin = self.collectionViewCalendarLayout.contentMargin;
     UIEdgeInsets sectionMargin = self.collectionViewCalendarLayout.sectionMargin;
-    UIEdgeInsets cellMargin = self.collectionViewCalendarLayout.cellMargin;
-    NSLog(@"contentMargin:%f,%f,%f,%f",contentMargin.top, contentMargin.left, contentMargin.bottom, contentMargin.right);
-    NSLog(@"sectionMargin:%f,%f,%f,%f",sectionMargin.top, sectionMargin.left, sectionMargin.bottom, sectionMargin.right);
-    NSLog(@"cellMargin:%f,%f,%f,%f",cellMargin.top, cellMargin.left, cellMargin.bottom, cellMargin.right);
-    
-    
-    
-    
     cell.hourHeight = self.collectionViewCalendarLayout.hourHeight;
-//    cell.hourHeight = [self hourHeightForcollectionView:self.collectionView layout:self.collectionViewCalendarLayout];
-    cell.collectionViewContentMargin = contentMargin;
     cell.collectionViewSectionMargin = sectionMargin;
+    cell.topGuideline = self.collectionViewCalendarLayout.topGuideline;
+    cell.bottomGuideline = self.collectionViewCalendarLayout.bottomGuideline;
     cell.calendarLayoutDelegate = self;
     cell.delegate = self;
     // Configure the cell
@@ -136,16 +106,8 @@ static NSString * const reuseIdentifier = @"Cell";
 {
     UICollectionReusableView *view;
     
-    if (kind == USCollectionElementKindDayColumnHeader) {
-//        USDayColumnHeader *dayColumnHeader = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:USDayColumnHeaderReuseIdentifier forIndexPath:indexPath];
-//        NSDate *day = [self.collectionViewCalendarLayout dateForDayColumnHeaderAtIndexPath:indexPath];
-//        NSDate *currentDay = [self currentTimeComponentsForCollectionView:self.collectionView layout:self.collectionViewCalendarLayout];
-//        dayColumnHeader.day = day;
-//        dayColumnHeader.currentDay = [[day beginningOfDay] isEqualToDate:[currentDay beginningOfDay]];
-//        view = dayColumnHeader;
-    } else if (kind == USCollectionElementKindTimeRowHeader) {
+ if (kind == USCollectionElementKindTimeRowHeader) {
         USTimeRowHeader *timeRowHeader = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:USTimeRowHeaderReuseIdentifier forIndexPath:indexPath];
-//        timeRowHeader.time = [self.collectionViewCalendarLayout dateForTimeRowHeaderAtIndexPath:indexPath];
         timeRowHeader.time = [self.eventOpenningTimeArray objectAtIndex:indexPath.item];
         view = timeRowHeader;
     }
@@ -153,51 +115,17 @@ static NSString * const reuseIdentifier = @"Cell";
 }
 
 #pragma mark <UICollectionViewDelegate>
-
-/*
-// Uncomment this method to specify if the specified item should be highlighted during tracking
-- (BOOL)collectionView:(UICollectionView *)collectionView shouldHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
-	return YES;
-}
-*/
-
-/*
-// Uncomment this method to specify if the specified item should be selected
-- (BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    return YES;
-}
-*/
-
-/*
-// Uncomment these methods to specify if an action menu should be displayed for the specified item, and react to actions performed on the item
-- (BOOL)collectionView:(UICollectionView *)collectionView shouldShowMenuForItemAtIndexPath:(NSIndexPath *)indexPath {
-	return NO;
-}
-
-- (BOOL)collectionView:(UICollectionView *)collectionView canPerformAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
-	return NO;
-}
-
-- (void)collectionView:(UICollectionView *)collectionView performAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
-	
-}
-*/
-
 -(void)initialize{
     self.collectionView.backgroundColor = [UIColor whiteColor];
     self.collectionView.scrollEnabled = YES;
     
     [self.collectionView registerClass:USEventCell.class forCellWithReuseIdentifier:USEventCellReuseIdentifier];
-    [self.collectionView registerClass:USDayColumnHeader.class forSupplementaryViewOfKind:USCollectionElementKindDayColumnHeader withReuseIdentifier:USDayColumnHeaderReuseIdentifier];
     [self.collectionView registerClass:USTimeRowHeader.class forSupplementaryViewOfKind:USCollectionElementKindTimeRowHeader withReuseIdentifier:USTimeRowHeaderReuseIdentifier];
     
     // These are optional. If you don't want any of the decoration views, just don't register a class for them.
-    [self.collectionViewCalendarLayout registerClass:USCurrentTimeIndicator.class forDecorationViewOfKind:USCollectionElementKindCurrentTimeIndicator];
-    [self.collectionViewCalendarLayout registerClass:USCurrentTimeGridline.class forDecorationViewOfKind:USCollectionElementKindCurrentTimeHorizontalGridline];
     [self.collectionViewCalendarLayout registerClass:USGridline.class forDecorationViewOfKind:USCollectionElementKindVerticalGridline];
     [self.collectionViewCalendarLayout registerClass:USGridline.class forDecorationViewOfKind:USCollectionElementKindHorizontalGridline];
     [self.collectionViewCalendarLayout registerClass:USTimeRowHeaderBackground.class forDecorationViewOfKind:USCollectionElementKindTimeRowHeaderBackground];
-    [self.collectionViewCalendarLayout registerClass:USDayColumnHeaderBackground.class forDecorationViewOfKind:USCollectionElementKindDayColumnHeaderBackground];
     
     // Added
     [self.collectionViewCalendarLayout registerClass:USTimeRowBodyBackground.class  forDecorationViewOfKind:USCollectionElementKindTimeRowBodyBackground];
@@ -265,19 +193,10 @@ static NSString * const reuseIdentifier = @"Cell";
     return endTime;
 }
 
-- (NSDate *)currentTimeComponentsForCollectionView:(UICollectionView *)collectionView layout:(USCollectionViewCalendarLayout *)collectionViewCalendarLayout
-{
-    return [NSDate date];
-}
-
 -(NSTimeInterval)collectionView:(UICollectionView *)collectionView layout:(USCollectionViewCalendarLayout *)collectionViewLayout{
     NSTimeInterval timeInterval = 30 * 60;
     return timeInterval;
 }
-
-//-(CGFloat)hourHeightForcollectionView:(UICollectionView *)collectionView layout:(USCollectionViewCalendarLayout *)collectionViewLayout{
-//    return 10.0f;
-//}
 
 // saved ordered time span data
 -(NSArray*)orderedTimeSpanForCollectionView:(UICollectionView*)collectionView layout:(USCollectionViewCalendarLayout*)collectionViewLayout{
@@ -290,7 +209,6 @@ static NSString * const reuseIdentifier = @"Cell";
         for (id key in allKeys) {
             int timespan = [[self.cachedOrderedTimeSpanData objectForKey:key] intValue];
             int keyInt = [key intValue];
-//            NSLog(@"%d",keyInt);
             for(int i = 0;i < timespan;i++){
                 int value = i + keyInt;
                 [orderedTimeSpanArray addObject: @(value)];

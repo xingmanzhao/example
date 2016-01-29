@@ -7,13 +7,13 @@
 //
 
 #import "USEventCell.h"
-#import "USEvent.h"
 
 @interface USEventCell ()
 {
+    CALayer *topLayer;
+//    CALayer *bottomLayer;
 }
 
-@property (nonatomic, strong) UIView *borderView;
 @property(nonatomic,assign) NSInteger startTimeNumber;
 @property(nonatomic,assign) NSInteger timeSpan;
 
@@ -26,48 +26,19 @@
 - (id)initWithFrame:(CGRect)frame{
     self = [super initWithFrame:frame];
     if (self) {
-        
-        self.layer.rasterizationScale = [[UIScreen mainScreen] scale];
-        self.layer.shouldRasterize = YES;
-        
-        self.layer.shadowColor = [[UIColor blackColor] CGColor];
-        self.layer.shadowOffset = CGSizeMake(0.0, 4.0);
-        self.layer.shadowRadius = 10.0;
-        self.layer.shadowOpacity = 0.2;
-        
-        self.borderView = [UIView new];
-        [self.contentView addSubview:self.borderView];
-        
+        [self addBorderLayer];
+    
         self.isOrdered = NO;
         [self updateColorsOrdered];
-        
-        CGFloat borderWidth = 2.0;
-        
-        [self.borderView makeConstraints:^(MASConstraintMaker *make) {
-            make.height.equalTo(self.height);
-            make.width.equalTo(@(borderWidth));
-            make.left.equalTo(self.left);
-            make.top.equalTo(self.top);
-        }];
-        
-//        [self.borderView setBackgroundColor:[UIColor orangeColor]];
-//        [self.borderView.layer setBorderColor:[UIColor redColor].CGColor];
-//        [self.borderView.layer setBorderWidth:1.0f];
-//        
-//        [self.layer setBorderColor:[UIColor colorWithHexString:@"1fa561"].CGColor];
-//        [self.layer setBorderWidth:2.0f];
-//        [self setBackgroundColor:[UIColor colorWithHexString:@"63c191"]];
     }
-//    UILongPressGestureRecognizer *tap = [[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(longPressGesture)];
-//    [self addGestureRecognizer:tap];
     
     // Cell width , height
     CGFloat widthForCell = self.bounds.size.width;
     CGFloat heightForCell = self.bounds.size.height;
     
     // Top And Bottom button width , height
-    CGFloat widthForButton = 20.0f;
-    CGFloat heightForButton = 20.0f;
+    CGFloat widthForButton = 26.0f;
+    CGFloat heightForButton = 26.0f;
     
     // Top Drag Button On Cell
     CGFloat xForTopButton = widthForCell * 0.8;
@@ -86,8 +57,8 @@
     [topButton addGestureRecognizer:topButtonPanGestureRecognizer];
     
     [topButton makeConstraints:^(MASConstraintMaker *make) {
-        make.height.equalTo(@(20));
-        make.width.equalTo(@(20));
+        make.height.equalTo(@(26));
+        make.width.equalTo(@(26));
         make.right.equalTo(self.mas_right).with.offset(-30);
         make.top.equalTo(self.mas_top).with.offset(0);
     }];
@@ -105,8 +76,8 @@
     [self addSubview:bottomButton];
     
     [bottomButton makeConstraints:^(MASConstraintMaker *make) {
-        make.height.equalTo(@(20));
-        make.width.equalTo(@(20));
+        make.height.equalTo(@(26));
+        make.width.equalTo(@(26));
         make.left.equalTo(self.mas_left).with.offset(30);
         make.bottom.equalTo(self.mas_bottom).with.offset(0);
     }];
@@ -163,16 +134,58 @@
     _event = event;
 }
 
+-(void)addBorderLayer{
+    CGFloat borderHeight = 3.0f;
+    topLayer = [CALayer layer];
+    [topLayer setBounds:CGRectMake(0, 0, self.bounds.size.width, borderHeight)];
+    [topLayer setPosition:CGPointMake(0, 0)];
+    [topLayer setAnchorPoint:CGPointZero];
+    [topLayer setCornerRadius:2.0f];
+    [self.layer addSublayer:topLayer];
+    
+//    bottomLayer = [CALayer layer];
+//    [bottomLayer setBounds:CGRectMake(0, 0, self.bounds.size.width, borderHeight / 2)];
+//    [bottomLayer setPosition:CGPointMake(0, self.bounds.size.height - borderHeight / 2)];
+//    [bottomLayer setAnchorPoint:CGPointZero];
+//    [bottomLayer setCornerRadius:2.0f];
+//    [self.layer addSublayer:bottomLayer];
+    
+    self.layer.rasterizationScale = [[UIScreen mainScreen] scale];
+    self.layer.shouldRasterize = YES;
+    
+    self.layer.shadowColor = [[UIColor blackColor] CGColor];
+    self.layer.shadowOffset = CGSizeMake(0.0, 4.0);
+    self.layer.shadowRadius = 10.0;
+    self.layer.shadowOpacity = 0.2;
+}
+
 - (void)updateColorsOrdered{
     self.contentView.backgroundColor = [self backgroundColorOrdered:self.isOrdered];
-    [self.layer setBorderColor:[self borderColorOrdered:self.isOrdered].CGColor];
-    [self.layer setBorderWidth:2.0f];
+    if(topLayer){
+        [topLayer setBackgroundColor:[self borderColorOrdered:self.isOrdered].CGColor];
+        [topLayer setPosition: CGPointMake(0,0)];
+    }
+//    if(bottomLayer){
+//        [bottomLayer setBackgroundColor:[self borderColorOrdered:self.isOrdered].CGColor];
+//        [bottomLayer setPosition: CGPointMake(0,self.bounds.size.height - bottomLayer.bounds.size.height)];
+//    }
+//    [self setBorderWithColor:[self borderColorOrdered:self.isOrdered] andWidth:3.0f];
+//    [self.layer setBorderColor:[self borderColorOrdered:self.isOrdered].CGColor];
+//    [self.layer setBorderWidth:2.0f];
+    [self setNeedsLayout];
 }
 
 - (void)updateColorsSelected{
     self.contentView.backgroundColor = [self backgroundColorHighlighted:self.isSelected];
-    [self.layer setBorderColor:[self borderColorOrdered:NO].CGColor];
-    [self.layer setBorderWidth:2.0f];
+    if(topLayer){
+        [topLayer setBackgroundColor:[self borderColorOrdered:NO].CGColor];
+    }
+//    if(bottomLayer){
+//        [bottomLayer setBackgroundColor:[self borderColorOrdered:NO].CGColor];
+//    }
+//    [self setBorderWithColor:[self borderColorOrdered:NO] andWidth:3.0f];
+//    [self.layer setBorderColor:[self borderColorOrdered:NO].CGColor];
+//    [self.layer setBorderWidth:2.0f];
     [self setNeedsLayout];
 }
 
@@ -259,8 +272,8 @@
         translationY = -translationPoint.y;
         CGFloat currentHeight = CGRectGetHeight(currentFrame) + translationY;
         CGFloat currentMinY = CGRectGetMinY(currentFrame) + translationY;
-        
-        if(currentHeight >= self.hourHeight || currentMinY >= self.topGuideline){
+        NSLog(@"%f,%f",currentMinY,self.topGuideline);
+        if(currentHeight >= self.hourHeight && currentMinY >= self.topGuideline){
             CGRect newFrame = CGRectMake(CGRectGetMinX(currentFrame), CGRectGetMinY(currentFrame) -  translationY, CGRectGetWidth(currentFrame),currentHeight);
             superView.frame = newFrame;
             // selected time span
@@ -306,7 +319,7 @@
         translationY = translationPoint.y;
         CGFloat currentHeight = CGRectGetHeight(currentFrame) + translationY;
         CGFloat currentMaxY = CGRectGetMaxY(currentFrame) + translationY;
-        if(currentHeight >= self.hourHeight || currentMaxY <= self.bottomGuideline){
+        if(currentHeight >= self.hourHeight && currentMaxY <= self.bottomGuideline){
             CGRect newFrame = CGRectMake(CGRectGetMinX(currentFrame), CGRectGetMinY(currentFrame), CGRectGetWidth(currentFrame), currentHeight);
             superView.frame = newFrame;
             
@@ -369,7 +382,7 @@
         CGFloat currentMaxY = CGRectGetMaxY(view.frame) + translationY;
 //        CGFloat topGuideline = self.collectionViewContentMargin.top + self.collectionViewSectionMargin.top;
 //        CGFloat bottomGuideline = CGRectGetHeight(view.superview.frame) - self.collectionViewContentMargin.bottom - self.collectionViewSectionMargin.bottom;
-        if(currentMinY >= self.topGuideline || currentMaxY <= self.bottomGuideline){
+        if(currentMinY >= self.topGuideline && currentMaxY <= self.bottomGuideline){
             // reset center
             view.center = CGPointMake(currentCellCenter.x, currentCellCenter.y + translationY);
             

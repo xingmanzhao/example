@@ -167,15 +167,11 @@ NSUInteger const USCollectionMinBackgroundZ = 0.0;
     
     BOOL needsToPopulateAllAttribtues = (self.allAttributes.count == 0);
     if (needsToPopulateAllAttribtues) {
-//        [self.allAttributes addObjectsFromArray:[self.dayColumnHeaderAttributes allValues]];
-//        [self.allAttributes addObjectsFromArray:[self.dayColumnHeaderBackgroundAttributes allValues]];
         [self.allAttributes addObjectsFromArray:[self.timeRowHeaderAttributes allValues]];
         [self.allAttributes addObjectsFromArray:[self.timeRowHeaderBackgroundAttributes allValues]];
         [self.allAttributes addObjectsFromArray:[self.verticalGridlineAttributes allValues]];
         [self.allAttributes addObjectsFromArray:[self.horizontalGridlineAttributes allValues]];
         [self.allAttributes addObjectsFromArray:[self.itemAttributes allValues]];
-//        [self.allAttributes addObjectsFromArray:[self.currentTimeIndicatorAttributes allValues]];
-//        [self.allAttributes addObjectsFromArray:[self.currentTimeHorizontalGridlineAttributes allValues]];
         
         // Added
         [self.allAttributes addObjectsFromArray:[self.timeRowBodyBackgroundAttributes allValues]];
@@ -197,7 +193,6 @@ NSUInteger const USCollectionMinBackgroundZ = 0.0;
 
 - (void)prepareHorizontalTileSectionLayoutForSections:(NSIndexSet *)sectionIndexes
 {
-//    NSLog(@"-------------------------prepareHorizontalTileSectionLayoutForSections");
     if (self.collectionView.numberOfSections == 0) {
         return;
     }
@@ -205,37 +200,33 @@ NSUInteger const USCollectionMinBackgroundZ = 0.0;
     BOOL needsToPopulateItemAttributes = (self.itemAttributes.count == 0);
     BOOL needsToPopulateVerticalGridlineAttributes = (self.verticalGridlineAttributes.count == 0);
     
+    // grid line min x
+    CGFloat calendarGridMinX = (self.sectionMargin.left + self.timeRowHeaderWidth);
+    // grid line min y
+    CGFloat calendarGridMinY = self.sectionMargin.top;
+    
+    // calendar grid height
     NSInteger numberOfItemsInSection = [self.collectionView numberOfItemsInSection:0];
-    CGFloat gridHeight = numberOfItemsInSection * self.hourHeight;
+    CGFloat calendarGridHeight = numberOfItemsInSection * self.hourHeight;
     
-    CGFloat sectionWidth = (self.sectionMargin.left + self.sectionWidth + self.sectionMargin.right);
-    CGFloat sectionHeight = nearbyintf(gridHeight + (self.sectionMargin.top + self.sectionMargin.bottom));
-    
-    CGFloat calendarGridMinX = self.timeRowHeaderWidth + self.contentMargin.left;
-    CGFloat calendarGridMinY = self.contentMargin.top + self.sectionMargin.top;
-    
-    CGFloat calendarContentMinX = (self.timeRowHeaderWidth + self.contentMargin.left + self.sectionMargin.left);
-    CGFloat calendarContentMinY = ( self.contentMargin.top + self.sectionMargin.top); // 20 + 30
-//    CGFloat calendarGridWidth = (self.collectionViewContentSize.width - self.timeRowHeaderWidth - self.contentMargin.right);
-    CGFloat calendarGridWidth = (self.collectionViewContentSize.width - self.timeRowHeaderWidth);
+    // section height
+    CGFloat sectionHeight = calendarGridHeight + self.sectionMargin.top + self.sectionMargin.bottom;
     
     // Time Row Header
-    CGFloat timeRowHeaderMinX = fmaxf(self.collectionView.contentOffset.x, 0.0);
-    BOOL timeRowHeaderFloating = ((timeRowHeaderMinX != 0) || self.displayHeaderBackgroundAtOrigin);;
+    CGFloat timeRowHeaderMinX = fmaxf(self.collectionView.contentOffset.x, 0.0) + self.sectionMargin.left;
+    BOOL timeRowHeaderFloating = ((timeRowHeaderMinX != 0) || self.displayHeaderBackgroundAtOrigin);
     
     // Time Row Header Background
     NSIndexPath *timeRowHeaderBackgroundIndexPath = [NSIndexPath indexPathForItem:0 inSection:0];
     UICollectionViewLayoutAttributes *timeRowHeaderBackgroundAttributes = [self layoutAttributesForDecorationViewAtIndexPath:timeRowHeaderBackgroundIndexPath ofKind:USCollectionElementKindTimeRowHeaderBackground withItemCache:self.timeRowHeaderBackgroundAttributes];
     
     // Frame
-    CGFloat timeRowHeaderBackgroundHeight = self.collectionView.frame.size.height;
-    CGFloat timeRowHeaderBackgroundWidth = self.collectionView.frame.size.width;
-    CGFloat timeRowHeaderBackgroundMinX = (timeRowHeaderMinX - timeRowHeaderBackgroundWidth + self.timeRowHeaderWidth);
-    CGFloat timeRowHeaderBackgroundMinY = self.contentMargin.top + self.sectionMargin.top - nearbyintf(self.hourHeight / 2.0);
+    CGFloat timeRowHeaderBackgroundHeight = calendarGridHeight + self.hourHeight;
+    CGFloat timeRowHeaderBackgroundWidth = self.timeRowHeaderWidth;
+    CGFloat timeRowHeaderBackgroundMinX = self.sectionMargin.left;
+    CGFloat timeRowHeaderBackgroundMinY = self.sectionMargin.top - nearbyintf(self.hourHeight / 2.0);
     
     timeRowHeaderBackgroundAttributes.frame = CGRectMake(timeRowHeaderBackgroundMinX, timeRowHeaderBackgroundMinY, timeRowHeaderBackgroundWidth, timeRowHeaderBackgroundHeight);
-    
-//    NSLog(@"timeRowHeaderBackgroundAttributes(x,y,w,h):%f,%f,%f,%f",timeRowHeaderBackgroundMinX,timeRowHeaderBackgroundMinY,timeRowHeaderBackgroundWidth,timeRowHeaderBackgroundHeight);
     
     // Floating
     timeRowHeaderBackgroundAttributes.hidden = !timeRowHeaderFloating;
@@ -246,7 +237,7 @@ NSUInteger const USCollectionMinBackgroundZ = 0.0;
         NSIndexPath *timeRowHeaderIndexPath = [NSIndexPath indexPathForItem:item inSection:0];
         UICollectionViewLayoutAttributes *timeRowHeaderAttributes = [self layoutAttributesForSupplementaryViewAtIndexPath:timeRowHeaderIndexPath ofKind:USCollectionElementKindTimeRowHeader withItemCache:self.timeRowHeaderAttributes];
         
-        CGFloat titleRowHeaderMinY = (calendarContentMinY + (self.hourHeight * item) - nearbyintf(self.hourHeight / 2.0));
+        CGFloat titleRowHeaderMinY = calendarGridMinY + self.hourHeight * item - nearbyintf(self.hourHeight / 2.0);
         timeRowHeaderAttributes.frame = CGRectMake(timeRowHeaderMinX, titleRowHeaderMinY, self.timeRowHeaderWidth, self.hourHeight);
         timeRowHeaderAttributes.zIndex = [self zIndexForElementKind:USCollectionElementKindTimeRowHeader floating:timeRowHeaderFloating];
         timeRowHeaderAttributes.hidden = (item % 2 != 0);
@@ -255,16 +246,15 @@ NSUInteger const USCollectionMinBackgroundZ = 0.0;
     // Time Row Body Background
     NSArray *orderedTimeSpanData = [self.delegate orderedTimeSpanForCollectionView:self.collectionView layout:self];
     
-    for (NSInteger item = 0; item <= (numberOfItemsInSection); item++) {
+    for (NSInteger item = 0; item <= numberOfItemsInSection; item++) {
         NSIndexPath *timeRowBodyBackgroundIndexPath = [NSIndexPath indexPathForItem:item inSection:0];
         
         UICollectionViewLayoutAttributes *timeRowBodyBackgroundAttributes = [self layoutAttributesForDecorationViewAtIndexPath:timeRowBodyBackgroundIndexPath ofKind:USCollectionElementKindTimeRowBodyBackground withItemCache:self.timeRowBodyBackgroundAttributes];
         
-//        CGFloat timeRowBodyBackgroundMinY = (calendarContentMinY + (self.hourHeight * item) - nearbyintf(self.hourHeight / 2.0));
-        CGFloat timeRowBodyBackgroundMinY = (calendarContentMinY + self.hourHeight * (item));
-        CGFloat timeRowBodyBackgroundXOffset = (calendarGridMinX + self.sectionMargin.left);
-        CGFloat timeRowBodyBackgroundMinX = fmaxf(timeRowBodyBackgroundXOffset, self.collectionView.contentOffset.x + timeRowBodyBackgroundXOffset);
-        CGFloat timeRowBodyBackgroundWidth = fminf(calendarGridWidth, self.collectionView.frame.size.width);
+        //        CGFloat timeRowBodyBackgroundMinY = (calendarContentMinY + (self.hourHeight * item) - nearbyintf(self.hourHeight / 2.0));
+        CGFloat timeRowBodyBackgroundMinX = calendarGridMinX;
+        CGFloat timeRowBodyBackgroundMinY = calendarGridMinY + self.hourHeight * (item);
+        CGFloat timeRowBodyBackgroundWidth = self.calendarGridWidth;
         
         timeRowBodyBackgroundAttributes.frame = CGRectMake(timeRowBodyBackgroundMinX, timeRowBodyBackgroundMinY, timeRowBodyBackgroundWidth, self.hourHeight);
         timeRowBodyBackgroundAttributes.zIndex = [self zIndexForElementKind:USCollectionElementKindTimeRowBodyBackground floating:timeRowHeaderFloating];
@@ -273,19 +263,15 @@ NSUInteger const USCollectionMinBackgroundZ = 0.0;
     }
     
     [sectionIndexes enumerateIndexesUsingBlock:^(NSUInteger section, BOOL *stop) {
-        CGFloat sectionMinX = (calendarContentMinX + (sectionWidth * section));
-        
         if (needsToPopulateVerticalGridlineAttributes) {
             // Vertical Gridline
             NSIndexPath *verticalGridlineIndexPath = [NSIndexPath indexPathForItem:0 inSection:section];
             UICollectionViewLayoutAttributes *verticalGridlineAttributes = [self layoutAttributesForDecorationViewAtIndexPath:verticalGridlineIndexPath ofKind:USCollectionElementKindVerticalGridline withItemCache:self.verticalGridlineAttributes];
             
-            CGFloat verticalGridlineMinX = nearbyintf(sectionMinX - self.sectionMargin.left - (self.verticalGridlineWidth / 2.0));
-            
-            CGFloat verticalGridlineMinY = self.contentMargin.top + self.sectionMargin.top - self.hourHeight;
-            CGFloat verticalGridlineHeight = sectionHeight - verticalGridlineMinY - self.contentMargin.bottom - self.sectionMargin.bottom;
+            CGFloat verticalGridlineMinX = nearbyintf(calendarGridMinX - self.verticalGridlineWidth / 2.0);
+            CGFloat verticalGridlineMinY = self.sectionMargin.top - self.hourHeight / 2.0;
+            CGFloat verticalGridlineHeight = sectionHeight - self.sectionMargin.top - self.sectionMargin.bottom + self.hourHeight;
             verticalGridlineAttributes.frame = CGRectMake(verticalGridlineMinX, verticalGridlineMinY, self.verticalGridlineWidth, verticalGridlineHeight);
-//            NSLog(@"verticalGridlineAttributes(x,y,w,h):%f,%f,%f,%f", verticalGridlineMinX, calendarGridMinY, self.verticalGridlineWidth, sectionHeight);
         }
         
         if (needsToPopulateItemAttributes) {
@@ -296,20 +282,16 @@ NSUInteger const USCollectionMinBackgroundZ = 0.0;
             UICollectionViewLayoutAttributes *itemAttributes = [self layoutAttributesForCellAtIndexPath:itemIndexPath withItemCache:self.itemAttributes];
             [sectionItemAttributes addObject:itemAttributes];
             
-            NSDate *startTimeForSection = [self startTimeForSection:section];
-            NSDate *defaultSelectedTimeForSection = [self defaultSelectedTimeForSection:section];
-            NSTimeInterval timeSpan = [self.delegate collectionView:self.collectionView layout:self];
-            NSTimeInterval defaultSelectedTimeSpan = [defaultSelectedTimeForSection timeIntervalSinceDate:startTimeForSection];
+//            NSDate *startTimeForSection = [self startTimeForSection:section];
+//            NSDate *defaultSelectedTimeForSection = [self defaultSelectedTimeForSection:section];
+//            NSTimeInterval timeSpan = [self.delegate collectionView:self.collectionView layout:self];
+//            NSTimeInterval defaultSelectedTimeSpan = [defaultSelectedTimeForSection timeIntervalSinceDate:startTimeForSection];
+    
             
-//            NSInteger hours = 2;
-//            CGFloat defaultSelectedTimeMinX = calendarGridMinX + self.sectionMargin.left;
-//            CGFloat defaultSelectedTimeMinY = (defaultSelectedTimeSpan / timeSpan) * self.hourHeight + self.contentMargin.top + self.sectionMargin.top;
+            CGFloat defaultSelectedTimeMinX = calendarGridMinX;
+            CGFloat defaultSelectedTimeMinY = self.sectionMargin.top + self.cachedDefaultSelectedTimeNumber * self.hourHeight;
             
-            CGFloat defaultSelectedTimeMinX = calendarGridMinX + self.sectionMargin.left;
-            CGFloat defaultSelectedTimeMinY = self.cachedDefaultSelectedTimeNumber * self.hourHeight + self.contentMargin.top + self.sectionMargin.top;
-            
-            CGFloat defaultSelectedTimeWidth = calendarGridWidth;
-//            CGFloat defaultSelectedTimeHeight = hours * self.hourHeight;
+            CGFloat defaultSelectedTimeWidth = self.calendarGridWidth;
             CGFloat defaultSelectedTimeHeight = self.cachedDefaultSelectedTimeSpan * self.hourHeight;
 
             itemAttributes.frame = CGRectMake(defaultSelectedTimeMinX, defaultSelectedTimeMinY, defaultSelectedTimeWidth, defaultSelectedTimeHeight);
@@ -322,20 +304,16 @@ NSUInteger const USCollectionMinBackgroundZ = 0.0;
     }];
     
     // Horizontal Gridlines
-//    NSUInteger horizontalGridlineIndex = 0;
     for (NSInteger item = 0; item <= numberOfItemsInSection; item++) {
 
         NSIndexPath *horizontalGridlineIndexPath = [NSIndexPath indexPathForItem:item inSection:0];
         UICollectionViewLayoutAttributes *horizontalGridlineAttributes = [self layoutAttributesForDecorationViewAtIndexPath:horizontalGridlineIndexPath ofKind:USCollectionElementKindHorizontalGridline withItemCache:self.horizontalGridlineAttributes];
         
-        CGFloat horizontalGridlineMinY = nearbyintf(calendarContentMinY + (self.hourHeight * item)) - (self.horizontalGridlineHeight / 2.0);
-        CGFloat horizontalGridlineXOffset = (calendarGridMinX + self.sectionMargin.left);
-        CGFloat horizontalGridlineMinX = fmaxf(horizontalGridlineXOffset, self.collectionView.contentOffset.x + horizontalGridlineXOffset);
-        CGFloat horizontalGridlineWidth = fminf(calendarGridWidth, self.collectionView.frame.size.width);
+        CGFloat horizontalGridlineMinX = calendarGridMinX;
+        CGFloat horizontalGridlineMinY = nearbyintf(calendarGridMinY + self.hourHeight * item - self.horizontalGridlineHeight / 2.0);
+        CGFloat horizontalGridlineWidth = self.calendarGridWidth;
         horizontalGridlineAttributes.frame = CGRectMake(horizontalGridlineMinX, horizontalGridlineMinY, horizontalGridlineWidth, self.horizontalGridlineHeight);
-        if(item )
         horizontalGridlineAttributes.hidden = (item % 2 != 0);
-//        horizontalGridlineIndex++;
     }
 }
 
@@ -347,8 +325,7 @@ NSUInteger const USCollectionMinBackgroundZ = 0.0;
     switch (self.sectionLayoutType) {
         case USSectionLayoutTypeHorizontalTile:
             height = [self maxSectionHeight];
-            width = (self.timeRowHeaderWidth + self.contentMargin.left + ((self.sectionMargin.left + self.sectionWidth + self.sectionMargin.right) * self.collectionView.numberOfSections) + self.contentMargin.right);
-//            NSLog(@"(w,h):%f,%f",width,height);
+            width = self.collectionView.frame.size.width;
             break;
         case USSectionLayoutTypeVerticalTile:
 //            height = [self stackedSectionHeight];
@@ -360,7 +337,6 @@ NSUInteger const USCollectionMinBackgroundZ = 0.0;
 
 - (NSArray *)layoutAttributesForElementsInRect:(CGRect)rect
 {
-//    NSLog(@"-------------------------layoutAttributesForElementsInRect(x,y,w,h):%f,%f,%f,%f",rect.origin.x,rect.origin.y,rect.size.width,rect.size.height);
     NSMutableIndexSet *visibleSections = [NSMutableIndexSet indexSet];
     [[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, self.collectionView.numberOfSections)] enumerateIndexesUsingBlock:^(NSUInteger section, BOOL *stop) {
         CGRect sectionRect = [self rectForSection:section];
@@ -380,7 +356,6 @@ NSUInteger const USCollectionMinBackgroundZ = 0.0;
 
 - (BOOL)shouldInvalidateLayoutForBoundsChange:(CGRect)newBounds
 {
-//    NSLog(@"-------------------------shouldInvalidateLayoutForBoundsChange(x,y,w,h):%f,%f,%f,%f", newBounds.origin.x,newBounds.origin.y,newBounds.size.width,newBounds.size.height);
     // Required for sticky headers
     CGRect oldBounds = self.collectionView.bounds;
     if(CGRectGetWidth(oldBounds) == CGRectGetWidth(newBounds)){
@@ -399,10 +374,7 @@ NSUInteger const USCollectionMinBackgroundZ = 0.0;
     CGRect sectionRect;
     switch (self.sectionLayoutType) {
         case USSectionLayoutTypeHorizontalTile: {
-            CGFloat calendarGridMinX = (self.timeRowHeaderWidth + self.contentMargin.left);
-            CGFloat sectionWidth = (self.sectionMargin.left + self.sectionWidth + self.sectionMargin.right);
-            CGFloat sectionMinX = (calendarGridMinX + self.sectionMargin.left + (sectionWidth * section));
-            sectionRect = CGRectMake(sectionMinX, 0.0, sectionWidth, self.collectionViewContentSize.height);
+            sectionRect = CGRectMake(0.0, 0.0, self.collectionViewContentSize.width, self.collectionViewContentSize.height);
             break;
         }
         case USSectionLayoutTypeVerticalTile: {
@@ -430,7 +402,7 @@ NSUInteger const USCollectionMinBackgroundZ = 0.0;
         }
     }
     
-    CGFloat headerAdjustedMaxSectionHeight = ( self.contentMargin.top + self.sectionMargin.top + maxSectionHeight + self.sectionMargin.bottom + self.contentMargin.bottom);
+    CGFloat headerAdjustedMaxSectionHeight = ( self.sectionMargin.top + maxSectionHeight + self.sectionMargin.bottom );
     if (maxSectionHeight != 0.0) {
         self.cachedMaxSectionHeight = headerAdjustedMaxSectionHeight;
         return headerAdjustedMaxSectionHeight;
@@ -580,22 +552,17 @@ NSUInteger const USCollectionMinBackgroundZ = 0.0;
     self.verticalGridlineAttributes = [NSMutableDictionary new];
     self.horizontalGridlineAttributes = [NSMutableDictionary new];
     
-    self.hourHeight = ((UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) ? 10.0 : 10.0);
-    self.sectionWidth = ((UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) ? 194.0 : 254.0);
+    // section margin
+    self.sectionMargin = UIEdgeInsetsMake(30.0, 0.0, 10.0, 0.0);
+    
+    self.hourHeight = ((UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) ? 20.0 : 16.0);
+//    self.sectionWidth = ((UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) ? 194.0 : 254.0);
     self.timeRowHeaderWidth = 56.0;
+    self.sectionWidth = ((UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) ? 194.0 : kScreenWidth - self.timeRowHeaderWidth);
+    self.calendarGridWidth = kScreenWidth - self.sectionMargin.left - self.timeRowHeaderWidth - self.sectionMargin.right;
     
-//    self.verticalGridlineWidth = (([[UIScreen mainScreen] scale] == 2.0) ? 0.5 : 1.0);
-//    self.horizontalGridlineHeight = (([[UIScreen mainScreen] scale] == 2.0) ? 0.5 : 1.0);
-    self.verticalGridlineWidth = (([[UIScreen mainScreen] scale] == 2.0) ? 1.0 : 2.0);
-    self.horizontalGridlineHeight = (([[UIScreen mainScreen] scale] == 2.0) ? 1.0 : 2.0);
-    
-//    self.sectionMargin = UIEdgeInsetsMake(30.0, 0.0, 30.0, 0.0);
-//    self.cellMargin = UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
-//    self.contentMargin = ((UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) ? UIEdgeInsetsMake(30.0, 0.0, 30.0, 30.0) : UIEdgeInsetsMake(0.0, 0.0, 0.0, 10.0));
-    
-    self.sectionMargin = UIEdgeInsetsMake(30.0, 30.0, 30.0, 30.0);
-    self.cellMargin = UIEdgeInsetsMake(5.0, 5.0, 5.0, 5.0);
-    self.contentMargin = ((UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) ? UIEdgeInsetsMake(30.0, 0.0, 30.0, 30.0) : UIEdgeInsetsMake(10.0, 10.0, 10.0, 10.0));
+    self.verticalGridlineWidth = (([[UIScreen mainScreen] scale] == 2.0) ? 0.5 : 1.0);
+    self.horizontalGridlineHeight = (([[UIScreen mainScreen] scale] == 2.0) ? 0.5 : 1.0);
     
     self.displayHeaderBackgroundAtOrigin = YES;
     self.sectionLayoutType = ((UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) ? USSectionLayoutTypeHorizontalTile : USSectionLayoutTypeVerticalTile);
@@ -647,7 +614,7 @@ NSUInteger const USCollectionMinBackgroundZ = 0.0;
             }
             // Time Row Body Background
             else if (elementKind == USCollectionElementKindTimeRowBodyBackground) {
-                return USCollectionMinBackgroundZ-1;
+                return USCollectionMinBackgroundZ;
             }
             // Day Column Header
             else if (elementKind == USCollectionElementKindDayColumnHeader) {
@@ -660,19 +627,19 @@ NSUInteger const USCollectionMinBackgroundZ = 0.0;
             // Cell
             else if (elementKind == nil) {
 //                return USCollectionMinCellZ;
-                return USCollectionMinOverlayZ + 10;
+                return USCollectionMinCellZ;
             }
             // Current Time Horizontal Gridline
             else if (elementKind == USCollectionElementKindCurrentTimeHorizontalGridline) {
-                return (USCollectionMinBackgroundZ + 2.0);
+                return (USCollectionMinBackgroundZ + 3.0);
             }
             // Vertical Gridline
             else if (elementKind == USCollectionElementKindVerticalGridline) {
-                return (USCollectionMinBackgroundZ + 1.0);
+                return (USCollectionMinBackgroundZ + 2.0);
             }
             // Horizontal Gridline
             else if (elementKind == USCollectionElementKindHorizontalGridline) {
-                return USCollectionMinBackgroundZ;
+                return USCollectionMinBackgroundZ + 1.0;
             }
         }
         case USSectionLayoutTypeVerticalTile: {
@@ -713,6 +680,18 @@ NSUInteger const USCollectionMinBackgroundZ = 0.0;
     return CGFLOAT_MIN;
 }
 
+-(CGFloat)topGuideline{
+    _topGuideline = self.sectionMargin.top;
+    NSLog(@"%f",_topGuideline);
+    return _topGuideline;
+}
+
+-(CGFloat)bottomGuideline{
+    NSInteger numberOfItems = [self.collectionView numberOfItemsInSection:0];
+    _bottomGuideline = self.hourHeight * numberOfItems + self.sectionMargin.top;
+    NSLog(@"%f",_bottomGuideline);
+    return _bottomGuideline;
+}
 
 
 @end

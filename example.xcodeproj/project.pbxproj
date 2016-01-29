@@ -105,16 +105,8 @@
 		D49E882A1C54EAA6002D1694 /* UIColor+Expanded.m in Sources */ = {isa = PBXBuildFile; fileRef = D49E87D11C54EAA6002D1694 /* UIColor+Expanded.m */; };
 		D49E882B1C54EAA6002D1694 /* UIColor+HSV.m in Sources */ = {isa = PBXBuildFile; fileRef = D49E87D31C54EAA6002D1694 /* UIColor+HSV.m */; };
 		D49E88321C54EDE8002D1694 /* USCalendarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D49E88311C54EDE8002D1694 /* USCalendarViewController.m */; };
-		D49E88381C54F350002D1694 /* USDateTimeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D49E88371C54F350002D1694 /* USDateTimeCell.m */; };
 		D49E883D1C5531CE002D1694 /* USCollectionViewCalendarLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = D49E883C1C5531CE002D1694 /* USCollectionViewCalendarLayout.m */; };
-		D49E88571C555771002D1694 /* USButton.m in Sources */ = {isa = PBXBuildFile; fileRef = D49E88541C555771002D1694 /* USButton.m */; };
-		D49E88581C555771002D1694 /* USData.m in Sources */ = {isa = PBXBuildFile; fileRef = D49E88561C555771002D1694 /* USData.m */; };
 		D49E885B1C5557B2002D1694 /* USEventCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D49E885A1C5557B2002D1694 /* USEventCell.m */; };
-		D49E885E1C5559E1002D1694 /* USEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = D49E885D1C5559E1002D1694 /* USEvent.m */; };
-		D49E88971C555D11002D1694 /* USCurrentTimeGridline.m in Sources */ = {isa = PBXBuildFile; fileRef = D49E888A1C555D11002D1694 /* USCurrentTimeGridline.m */; };
-		D49E88981C555D11002D1694 /* USCurrentTimeIndicator.m in Sources */ = {isa = PBXBuildFile; fileRef = D49E888C1C555D11002D1694 /* USCurrentTimeIndicator.m */; };
-		D49E88991C555D11002D1694 /* USDayColumnHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = D49E888E1C555D11002D1694 /* USDayColumnHeader.m */; };
-		D49E889A1C555D11002D1694 /* USDayColumnHeaderBackground.m in Sources */ = {isa = PBXBuildFile; fileRef = D49E88901C555D11002D1694 /* USDayColumnHeaderBackground.m */; };
 		D49E889B1C555D11002D1694 /* USGridline.m in Sources */ = {isa = PBXBuildFile; fileRef = D49E88921C555D11002D1694 /* USGridline.m */; };
 		D49E889C1C555D11002D1694 /* USTimeRowHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = D49E88941C555D11002D1694 /* USTimeRowHeader.m */; };
 		D49E889D1C555D11002D1694 /* USTimeRowHeaderBackground.m in Sources */ = {isa = PBXBuildFile; fileRef = D49E88961C555D11002D1694 /* USTimeRowHeaderBackground.m */; };
@@ -353,27 +345,11 @@
 		D49E87D31C54EAA6002D1694 /* UIColor+HSV.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+HSV.m"; sourceTree = "<group>"; };
 		D49E88301C54EDE8002D1694 /* USCalendarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = USCalendarViewController.h; path = "View Controllers/USCalendarViewController.h"; sourceTree = "<group>"; };
 		D49E88311C54EDE8002D1694 /* USCalendarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = USCalendarViewController.m; path = "View Controllers/USCalendarViewController.m"; sourceTree = "<group>"; };
-		D49E88361C54F350002D1694 /* USDateTimeCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = USDateTimeCell.h; path = "Collection View Cells/USDateTimeCell.h"; sourceTree = "<group>"; };
-		D49E88371C54F350002D1694 /* USDateTimeCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = USDateTimeCell.m; path = "Collection View Cells/USDateTimeCell.m"; sourceTree = "<group>"; };
 		D49E88391C550B77002D1694 /* example-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "example-Prefix.pch"; sourceTree = "<group>"; };
 		D49E883B1C5531CE002D1694 /* USCollectionViewCalendarLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = USCollectionViewCalendarLayout.h; path = "Collection View Layout/USCollectionViewCalendarLayout.h"; sourceTree = "<group>"; };
 		D49E883C1C5531CE002D1694 /* USCollectionViewCalendarLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = USCollectionViewCalendarLayout.m; path = "Collection View Layout/USCollectionViewCalendarLayout.m"; sourceTree = "<group>"; };
-		D49E88531C555771002D1694 /* USButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = USButton.h; path = "Collection View Cells/USButton.h"; sourceTree = "<group>"; };
-		D49E88541C555771002D1694 /* USButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = USButton.m; path = "Collection View Cells/USButton.m"; sourceTree = "<group>"; };
-		D49E88551C555771002D1694 /* USData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = USData.h; path = "Collection View Cells/USData.h"; sourceTree = "<group>"; };
-		D49E88561C555771002D1694 /* USData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = USData.m; path = "Collection View Cells/USData.m"; sourceTree = "<group>"; };
 		D49E88591C5557B2002D1694 /* USEventCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = USEventCell.h; path = "Collection View Cells/USEventCell.h"; sourceTree = "<group>"; };
 		D49E885A1C5557B2002D1694 /* USEventCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = USEventCell.m; path = "Collection View Cells/USEventCell.m"; sourceTree = "<group>"; };
-		D49E885C1C5559E1002D1694 /* USEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = USEvent.h; sourceTree = "<group>"; };
-		D49E885D1C5559E1002D1694 /* USEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = USEvent.m; sourceTree = "<group>"; };
-		D49E88891C555D11002D1694 /* USCurrentTimeGridline.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = USCurrentTimeGridline.h; path = "Collection View Reusable Views/USCurrentTimeGridline.h"; sourceTree = "<group>"; };
-		D49E888A1C555D11002D1694 /* USCurrentTimeGridline.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = USCurrentTimeGridline.m; path = "Collection View Reusable Views/USCurrentTimeGridline.m"; sourceTree = "<group>"; };
-		D49E888B1C555D11002D1694 /* USCurrentTimeIndicator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = USCurrentTimeIndicator.h; path = "Collection View Reusable Views/USCurrentTimeIndicator.h"; sourceTree = "<group>"; };
-		D49E888C1C555D11002D1694 /* USCurrentTimeIndicator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = USCurrentTimeIndicator.m; path = "Collection View Reusable Views/USCurrentTimeIndicator.m"; sourceTree = "<group>"; };
-		D49E888D1C555D11002D1694 /* USDayColumnHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = USDayColumnHeader.h; path = "Collection View Reusable Views/USDayColumnHeader.h"; sourceTree = "<group>"; };
-		D49E888E1C555D11002D1694 /* USDayColumnHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = USDayColumnHeader.m; path = "Collection View Reusable Views/USDayColumnHeader.m"; sourceTree = "<group>"; };
-		D49E888F1C555D11002D1694 /* USDayColumnHeaderBackground.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = USDayColumnHeaderBackground.h; path = "Collection View Reusable Views/USDayColumnHeaderBackground.h"; sourceTree = "<group>"; };
-		D49E88901C555D11002D1694 /* USDayColumnHeaderBackground.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = USDayColumnHeaderBackground.m; path = "Collection View Reusable Views/USDayColumnHeaderBackground.m"; sourceTree = "<group>"; };
 		D49E88911C555D11002D1694 /* USGridline.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = USGridline.h; path = "Collection View Reusable Views/USGridline.h"; sourceTree = "<group>"; };
 		D49E88921C555D11002D1694 /* USGridline.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = USGridline.m; path = "Collection View Reusable Views/USGridline.m"; sourceTree = "<group>"; };
 		D49E88931C555D11002D1694 /* USTimeRowHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = USTimeRowHeader.h; path = "Collection View Reusable Views/USTimeRowHeader.h"; sourceTree = "<group>"; };
@@ -839,8 +815,6 @@
 		D49E882C1C54ED30002D1694 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				D49E885C1C5559E1002D1694 /* USEvent.h */,
-				D49E885D1C5559E1002D1694 /* USEvent.m */,
 				D487613D1C58F1A300DCE764 /* USEventRule.h */,
 				D487613E1C58F1A300DCE764 /* USEventRule.m */,
 			);
@@ -860,14 +834,6 @@
 		D49E882E1C54ED4F002D1694 /* Collection View Reusable Views */ = {
 			isa = PBXGroup;
 			children = (
-				D49E88891C555D11002D1694 /* USCurrentTimeGridline.h */,
-				D49E888A1C555D11002D1694 /* USCurrentTimeGridline.m */,
-				D49E888B1C555D11002D1694 /* USCurrentTimeIndicator.h */,
-				D49E888C1C555D11002D1694 /* USCurrentTimeIndicator.m */,
-				D49E888D1C555D11002D1694 /* USDayColumnHeader.h */,
-				D49E888E1C555D11002D1694 /* USDayColumnHeader.m */,
-				D49E888F1C555D11002D1694 /* USDayColumnHeaderBackground.h */,
-				D49E88901C555D11002D1694 /* USDayColumnHeaderBackground.m */,
 				D49E88911C555D11002D1694 /* USGridline.h */,
 				D49E88921C555D11002D1694 /* USGridline.m */,
 				D49E88931C555D11002D1694 /* USTimeRowHeader.h */,
@@ -885,12 +851,6 @@
 			children = (
 				D49E88591C5557B2002D1694 /* USEventCell.h */,
 				D49E885A1C5557B2002D1694 /* USEventCell.m */,
-				D49E88531C555771002D1694 /* USButton.h */,
-				D49E88541C555771002D1694 /* USButton.m */,
-				D49E88551C555771002D1694 /* USData.h */,
-				D49E88561C555771002D1694 /* USData.m */,
-				D49E88361C54F350002D1694 /* USDateTimeCell.h */,
-				D49E88371C54F350002D1694 /* USDateTimeCell.m */,
 			);
 			name = "Collection View Cells";
 			sourceTree = "<group>";
@@ -1065,22 +1025,18 @@
 				D49E881D1C54EAA6002D1694 /* RKPathMatcher.m in Sources */,
 				D40178F41C53B55E0063A23E /* AppDelegate.m in Sources */,
 				D49E87E71C54EAA6002D1694 /* View+MASAdditions.m in Sources */,
-				D49E88971C555D11002D1694 /* USCurrentTimeGridline.m in Sources */,
 				D49E87E91C54EAA6002D1694 /* MBProgressHUD.m in Sources */,
 				D49E882A1C54EAA6002D1694 /* UIColor+Expanded.m in Sources */,
 				D49E883D1C5531CE002D1694 /* USCollectionViewCalendarLayout.m in Sources */,
 				D49E87EF1C54EAA6002D1694 /* RKEntityCache.m in Sources */,
 				D49E87DA1C54EAA6002D1694 /* AFURLConnectionOperation.m in Sources */,
 				D49E88051C54EAA6002D1694 /* RKDynamicMapping.m in Sources */,
-				D49E88991C555D11002D1694 /* USDayColumnHeader.m in Sources */,
 				D49E87E31C54EAA6002D1694 /* MASViewAttribute.m in Sources */,
 				D49E87E11C54EAA6002D1694 /* MASConstraintMaker.m in Sources */,
 				D49E88181C54EAA6002D1694 /* RKLog.m in Sources */,
-				D49E88581C555771002D1694 /* USData.m in Sources */,
 				D487613F1C58F1A300DCE764 /* USEventRule.m in Sources */,
 				D49E87DB1C54EAA6002D1694 /* AFXMLRequestOperation.m in Sources */,
 				D49E88211C54EAA6002D1694 /* README.md in Sources */,
-				D49E88571C555771002D1694 /* USButton.m in Sources */,
 				D49E87D71C54EAA6002D1694 /* AFJSONRequestOperation.m in Sources */,
 				D49E88031C54EAA6002D1694 /* RKRouteSet.m in Sources */,
 				D49E87F61C54EAA6002D1694 /* RKPropertyInspector+CoreData.m in Sources */,
@@ -1097,7 +1053,6 @@
 				D49E88221C54EAA6002D1694 /* lcl_RK.m in Sources */,
 				D49E87F31C54EAA6002D1694 /* RKManagedObjectImporter.m in Sources */,
 				D49E88061C54EAA6002D1694 /* RKErrorMessage.m in Sources */,
-				D49E88981C555D11002D1694 /* USCurrentTimeIndicator.m in Sources */,
 				D49E87E51C54EAA6002D1694 /* NSArray+MASAdditions.m in Sources */,
 				D49E88091C54EAA6002D1694 /* RKMapping.m in Sources */,
 				D49E87DD1C54EAA6002D1694 /* NSDate+CupertinoYankee.m in Sources */,
@@ -1120,19 +1075,16 @@
 				D49E87FF1C54EAA6002D1694 /* RKResponseDescriptor.m in Sources */,
 				D49E87FA1C54EAA6002D1694 /* RKObjectManager.m in Sources */,
 				D49E87DF1C54EAA6002D1694 /* MASCompositeConstraint.m in Sources */,
-				D49E889A1C555D11002D1694 /* USDayColumnHeaderBackground.m in Sources */,
 				D49E88251C54EAA6002D1694 /* README.mdown in Sources */,
 				D49E881E1C54EAA6002D1694 /* RKPathUtilities.m in Sources */,
 				D49E87D51C54EAA6002D1694 /* AFHTTPRequestOperation.m in Sources */,
 				D49E881C1C54EAA6002D1694 /* RKOperationStateMachine.m in Sources */,
 				D49E880A1C54EAA6002D1694 /* RKMappingOperation.m in Sources */,
 				D49E87F51C54EAA6002D1694 /* RKManagedObjectStore.m in Sources */,
-				D49E885E1C5559E1002D1694 /* USEvent.m in Sources */,
 				D49E88071C54EAA6002D1694 /* RKHTTPUtilities.m in Sources */,
 				D49E88161C54EAA6002D1694 /* RKErrors.m in Sources */,
 				D49E88001C54EAA6002D1694 /* RKResponseMapperOperation.m in Sources */,
 				D40178F11C53B55E0063A23E /* main.m in Sources */,
-				D49E88381C54F350002D1694 /* USDateTimeCell.m in Sources */,
 				D49E87D41C54EAA6002D1694 /* AFHTTPClient.m in Sources */,
 				D49E87EB1C54EAA6002D1694 /* NSManagedObject+RKAdditions.m in Sources */,
 				D49E87F91C54EAA6002D1694 /* RKManagedObjectRequestOperation.m in Sources */,
