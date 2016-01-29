@@ -209,9 +209,26 @@ static NSString * const reuseIdentifier = @"Cell";
         for (id key in allKeys) {
             int timespan = [[self.cachedOrderedTimeSpanData objectForKey:key] intValue];
             int keyInt = [key intValue];
+            
+            // preview add 0.5
+            if(keyInt > 0){
+                int prewOrderNumber = keyInt - 1;
+                if([orderedTimeSpanArray containsObject:@(prewOrderNumber)] == NO){
+                    [orderedTimeSpanArray addObject:@(prewOrderNumber)];
+                }
+            }
+            
             for(int i = 0;i < timespan;i++){
                 int value = i + keyInt;
-                [orderedTimeSpanArray addObject: @(value)];
+                if([orderedTimeSpanArray containsObject:@(value)] == NO){
+                    [orderedTimeSpanArray addObject: @(value)];
+                }
+            }
+            
+            // nexe add 0.5
+            int nextOrderNumber = keyInt + timespan;
+            if([orderedTimeSpanArray containsObject:@(nextOrderNumber)] == NO){
+                 [orderedTimeSpanArray addObject: @(nextOrderNumber)];
             }
         }
         return orderedTimeSpanArray;

@@ -273,7 +273,7 @@
         CGFloat currentHeight = CGRectGetHeight(currentFrame) + translationY;
         CGFloat currentMinY = CGRectGetMinY(currentFrame) + translationY;
         NSLog(@"%f,%f",currentMinY,self.topGuideline);
-        if(currentHeight >= self.hourHeight && currentMinY >= self.topGuideline){
+        if(currentHeight >= self.hourHeight * 2 && currentMinY >= self.topGuideline){
             CGRect newFrame = CGRectMake(CGRectGetMinX(currentFrame), CGRectGetMinY(currentFrame) -  translationY, CGRectGetWidth(currentFrame),currentHeight);
             superView.frame = newFrame;
             // selected time span
@@ -319,7 +319,7 @@
         translationY = translationPoint.y;
         CGFloat currentHeight = CGRectGetHeight(currentFrame) + translationY;
         CGFloat currentMaxY = CGRectGetMaxY(currentFrame) + translationY;
-        if(currentHeight >= self.hourHeight && currentMaxY <= self.bottomGuideline){
+        if(currentHeight >= self.hourHeight * 2 && currentMaxY <= self.bottomGuideline){
             CGRect newFrame = CGRectMake(CGRectGetMinX(currentFrame), CGRectGetMinY(currentFrame), CGRectGetWidth(currentFrame), currentHeight);
             superView.frame = newFrame;
             
