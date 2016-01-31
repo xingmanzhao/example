@@ -15,4 +15,8 @@
 @property(nonatomic,assign) CGFloat dayWidth;
 @property(nonatomic,assign) CGFloat dayHeight;
 
+@property(nonatomic,strong) NSMutableDictionary *cachedOrderedTimeSpanData;
+@property(nonatomic,strong) NSMutableArray *eventRuleArray;
+@property(nonatomic,strong) NSMutableArray *eventOpenningTimeArray;
+
 @end

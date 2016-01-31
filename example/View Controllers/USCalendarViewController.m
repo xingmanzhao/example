@@ -20,9 +20,9 @@
 // Added
 #import "USTimeRowBodyBackground.h"
 
-NSString * const USEventCellReuseIdentifier = @"USEventCellReuseIdentifier";
-NSString * const USDayColumnHeaderReuseIdentifier = @"USDayColumnHeaderReuseIdentifier";
-NSString * const USTimeRowHeaderReuseIdentifier = @"USTimeRowHeaderReuseIdentifier";
+//NSString * const USEventCellReuseIdentifier = @"USEventCellReuseIdentifier";
+//NSString * const USDayColumnHeaderReuseIdentifier = @"USDayColumnHeaderReuseIdentifier";
+//NSString * const USTimeRowHeaderReuseIdentifier = @"USTimeRowHeaderReuseIdentifier";
 
 @interface USCalendarViewController ()<USCollectionViewDelegateCalendarLayout, USEventCellDelegate>
 @property(nonatomic,strong) USCollectionViewCalendarLayout *collectionViewCalendarLayout;
@@ -47,7 +47,7 @@ static NSString * const reuseIdentifier = @"Cell";
     // self.clearsSelectionOnViewWillAppear = NO;
     
     // Register cell classes
-    [self.collectionView registerClass:[USEventCell class] forCellWithReuseIdentifier:USEventCellReuseIdentifier];
+//    [self.collectionView registerClass:[USEventCell class] forCellWithReuseIdentifier:USEventCellReuseIdentifier];
     
     // Do any additional setup after loading the view.
     [self initialize];
@@ -88,18 +88,18 @@ static NSString * const reuseIdentifier = @"Cell";
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    USEventCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:USEventCellReuseIdentifier forIndexPath:indexPath];
+//    USEventCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:USEventCellReuseIdentifier forIndexPath:indexPath];
    
-    UIEdgeInsets sectionMargin = self.collectionViewCalendarLayout.sectionMargin;
-    cell.hourHeight = self.collectionViewCalendarLayout.hourHeight;
-    cell.collectionViewSectionMargin = sectionMargin;
-    cell.topGuideline = self.collectionViewCalendarLayout.topGuideline;
-    cell.bottomGuideline = self.collectionViewCalendarLayout.bottomGuideline;
-    cell.calendarLayoutDelegate = self;
-    cell.delegate = self;
+//    UIEdgeInsets sectionMargin = self.collectionViewCalendarLayout.sectionMargin;
+//    cell.hourHeight = self.collectionViewCalendarLayout.hourHeight;
+//    cell.collectionViewSectionMargin = sectionMargin;
+//    cell.topGuideline = self.collectionViewCalendarLayout.topGuideline;
+//    cell.bottomGuideline = self.collectionViewCalendarLayout.bottomGuideline;
+//    cell.calendarLayoutDelegate = self;
+//    cell.delegate = self;
     // Configure the cell
     
-    return cell;
+    return nil;
 }
 
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
@@ -107,9 +107,9 @@ static NSString * const reuseIdentifier = @"Cell";
     UICollectionReusableView *view;
     
  if (kind == USCollectionElementKindTimeRowHeader) {
-        USTimeRowHeader *timeRowHeader = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:USTimeRowHeaderReuseIdentifier forIndexPath:indexPath];
-        timeRowHeader.time = [self.eventOpenningTimeArray objectAtIndex:indexPath.item];
-        view = timeRowHeader;
+//        USTimeRowHeader *timeRowHeader = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:USTimeRowHeaderReuseIdentifier forIndexPath:indexPath];
+//        timeRowHeader.time = [self.eventOpenningTimeArray objectAtIndex:indexPath.item];
+//        view = timeRowHeader;
     }
     return view;
 }
@@ -119,8 +119,8 @@ static NSString * const reuseIdentifier = @"Cell";
     self.collectionView.backgroundColor = [UIColor whiteColor];
     self.collectionView.scrollEnabled = YES;
     
-    [self.collectionView registerClass:USEventCell.class forCellWithReuseIdentifier:USEventCellReuseIdentifier];
-    [self.collectionView registerClass:USTimeRowHeader.class forSupplementaryViewOfKind:USCollectionElementKindTimeRowHeader withReuseIdentifier:USTimeRowHeaderReuseIdentifier];
+//    [self.collectionView registerClass:USEventCell.class forCellWithReuseIdentifier:USEventCellReuseIdentifier];
+//    [self.collectionView registerClass:USTimeRowHeader.class forSupplementaryViewOfKind:USCollectionElementKindTimeRowHeader withReuseIdentifier:USTimeRowHeaderReuseIdentifier];
     
     // These are optional. If you don't want any of the decoration views, just don't register a class for them.
     [self.collectionViewCalendarLayout registerClass:USGridline.class forDecorationViewOfKind:USCollectionElementKindVerticalGridline];

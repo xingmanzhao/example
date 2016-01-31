@@ -553,7 +553,7 @@ NSUInteger const USCollectionMinBackgroundZ = 0.0;
     self.horizontalGridlineAttributes = [NSMutableDictionary new];
     
     // section margin
-    self.sectionMargin = UIEdgeInsetsMake(30.0, 0.0, 10.0, 0.0);
+    self.sectionMargin = UIEdgeInsetsMake(36.0, 0.0, 10.0, 0.0);
     
     self.hourHeight = ((UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) ? 20.0 : 16.0);
 //    self.sectionWidth = ((UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) ? 194.0 : 254.0);

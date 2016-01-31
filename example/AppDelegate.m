@@ -20,8 +20,8 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
     
-    USCalendarViewController *calendarViewController = [[USCalendarViewController alloc] init];
-//    DemoViewController *calendarViewController = [[DemoViewController alloc] init];
+//    USCalendarViewController *calendarViewController = [[USCalendarViewController alloc] init];
+    DemoViewController *calendarViewController = [[DemoViewController alloc] init];
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.window.rootViewController = calendarViewController;

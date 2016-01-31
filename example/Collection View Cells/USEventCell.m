@@ -389,6 +389,12 @@
             // selected time span
             [self selectedTimeSpan:view.frame];
         }
+        NSLog(@"max Y : %f,%f",currentMaxY,CGRectGetMaxY(superView.frame));
+        if(currentMaxY > CGRectGetMaxY(superView.frame)){
+            UICollectionView *collectionView = (UICollectionView*)superView;
+            NSIndexPath *indexPath = [NSIndexPath indexPathForItem:20 inSection:0];
+            [collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionBottom animated:YES];
+        }
     }
     
     [recognizer setTranslation:CGPointZero inView:superView];
