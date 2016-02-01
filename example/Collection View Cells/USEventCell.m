@@ -279,6 +279,15 @@
             superView.frame = newFrame;
             // selected time span
             [self selectedTimeSpan:newFrame];
+            
+            if([self.superview isKindOfClass:[UICollectionView class]] == YES){
+                UICollectionView *collectionView = (UICollectionView*)self.superview;
+                CGPoint currentOffsetPoint = collectionView.contentOffset;
+                CGFloat contentOffsetY = currentMinY - currentOffsetPoint.y;
+                if(contentOffsetY <0){
+                     [collectionView setContentOffset:CGPointMake(0, currentMinY) animated:YES];
+                }
+            }
         }
     }
     
@@ -320,12 +329,23 @@
         translationY = translationPoint.y;
         CGFloat currentHeight = CGRectGetHeight(currentFrame) + translationY;
         CGFloat currentMaxY = CGRectGetMaxY(currentFrame) + translationY;
+        
         if(currentHeight >= self.hourHeight * 2 && currentMaxY <= self.bottomGuideline){
             CGRect newFrame = CGRectMake(CGRectGetMinX(currentFrame), CGRectGetMinY(currentFrame), CGRectGetWidth(currentFrame), currentHeight);
             superView.frame = newFrame;
             
             // selected time span
             [self selectedTimeSpan:newFrame];
+            
+            if([self.superview isKindOfClass:[UICollectionView class]] == YES){
+                UICollectionView *collectionView = (UICollectionView*)self.superview;
+                 CGPoint currentOffsetPoint = collectionView.contentOffset;
+                CGFloat contentOffsetY = currentMaxY - CGRectGetHeight(collectionView.frame) - currentOffsetPoint.y;
+                if(contentOffsetY > 0){
+                    contentOffsetY += currentOffsetPoint.y;
+                    [collectionView setContentOffset:CGPointMake(0, contentOffsetY) animated:YES];
+                }
+            }
         }
     }
     
@@ -381,21 +401,35 @@
         translationY = translationPoint.y;
         CGFloat currentMinY = CGRectGetMinY(view.frame) + translationY;
         CGFloat currentMaxY = CGRectGetMaxY(view.frame) + translationY;
-//        CGFloat topGuideline = self.collectionViewContentMargin.top + self.collectionViewSectionMargin.top;
-//        CGFloat bottomGuideline = CGRectGetHeight(view.superview.frame) - self.collectionViewContentMargin.bottom - self.collectionViewSectionMargin.bottom;
         if(currentMinY >= self.topGuideline && currentMaxY <= self.bottomGuideline){
             // reset center
             view.center = CGPointMake(currentCellCenter.x, currentCellCenter.y + translationY);
             
             // selected time span
             [self selectedTimeSpan:view.frame];
+            
+            if([self.superview isKindOfClass:[UICollectionView class]] == YES){
+                UICollectionView *collectionView = (UICollectionView*)self.superview;
+                CGPoint currentOffsetPoint = collectionView.contentOffset;
+            
+                CGFloat topOffsetY = currentMinY - currentOffsetPoint.y;
+                if(topOffsetY <0){
+                    [collectionView setContentOffset:CGPointMake(0, currentMinY) animated:YES];
+                }
+                
+                CGFloat bottomOffsetY = currentMaxY - CGRectGetHeight(collectionView.frame) - currentOffsetPoint.y;
+                if(bottomOffsetY > 0){
+                    bottomOffsetY += currentOffsetPoint.y;
+                    [collectionView setContentOffset:CGPointMake(0, bottomOffsetY) animated:YES];
+                }
+            }
         }
-        NSLog(@"max Y : %f,%f",currentMaxY,CGRectGetMaxY(superView.frame));
-        if(currentMaxY > CGRectGetMaxY(superView.frame)){
-            UICollectionView *collectionView = (UICollectionView*)superView;
-            NSIndexPath *indexPath = [NSIndexPath indexPathForItem:20 inSection:0];
-            [collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionBottom animated:YES];
-        }
+        
+//        if(currentMaxY > CGRectGetMaxY(superView.frame)){
+//            UICollectionView *collectionView = (UICollectionView*)superView;
+//            NSIndexPath *indexPath = [NSIndexPath indexPathForItem:20 inSection:0];
+//            [collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionBottom animated:YES];
+//        }
     }
     
     [recognizer setTranslation:CGPointZero inView:superView];

@@ -24,7 +24,39 @@ NSUInteger const USCollectionMinOverlayZ = 1000.0; // Allows for 900 items in a 
 NSUInteger const USCollectionMinCellZ = 100.0;  // Allows for 100 items in a section's background
 NSUInteger const USCollectionMinBackgroundZ = 0.0;
 
+@interface MSTimerWeakTarget : NSObject
+@property (nonatomic, weak) id target;
+@property (nonatomic, assign) SEL selector;
+- (SEL)fireSelector;
+@end
+
+@implementation MSTimerWeakTarget
+- (id)initWithTarget:(id)target selector:(SEL)selector
+{
+    self = [super init];
+    if (self) {
+        self.target = target;
+        self.selector = selector;
+    }
+    return self;
+}
+- (void)fire:(NSTimer*)timer
+{
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
+    [self.target performSelector:self.selector withObject:timer];
+#pragma clang diagnostic pop
+}
+- (SEL)fireSelector
+{
+    return @selector(fire:);
+}
+@end
+
 @interface USCollectionViewCalendarLayout ()
+
+// Minute Timer
+@property (nonatomic, strong) NSTimer *minuteTimer;
 
 // Caches
 @property (nonatomic, assign) BOOL needsToPopulateAttributesForAllSections;
@@ -37,8 +69,6 @@ NSUInteger const USCollectionMinBackgroundZ = 0.0;
 @property(nonatomic,strong) NSMutableDictionary *cachedDefaultSelectedTimeDate;
 @property(nonatomic,assign) NSInteger cachedDefaultSelectedTimeNumber;
 @property(nonatomic,assign) NSInteger cachedDefaultSelectedTimeSpan;
-
-
 
 // Registered Decoration Classes
 @property (nonatomic, strong) NSMutableDictionary *registeredDecorationClasses;
@@ -98,8 +128,10 @@ NSUInteger const USCollectionMinBackgroundZ = 0.0;
 @end
 @implementation USCollectionViewCalendarLayout
 
--(void)dealloc{
-    
+- (void)dealloc
+{
+    [self.minuteTimer invalidate];
+    self.minuteTimer = nil;
 }
 
 -(id)init{
@@ -464,7 +496,6 @@ NSUInteger const USCollectionMinBackgroundZ = 0.0;
 
 - (void)invalidateLayoutCache
 {
-//    NSLog(@"-------------------------invalidateLayoutCache");
     self.needsToPopulateAttributesForAllSections = YES;
     
     // Invalidate cached Components
@@ -552,11 +583,11 @@ NSUInteger const USCollectionMinBackgroundZ = 0.0;
     self.verticalGridlineAttributes = [NSMutableDictionary new];
     self.horizontalGridlineAttributes = [NSMutableDictionary new];
     
-    // section margin
-    self.sectionMargin = UIEdgeInsetsMake(30.0, 0.0, 10.0, 0.0);
-    
-    self.hourHeight = ((UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) ? 20.0 : 16.0);
+    self.hourHeight = (([[UIScreen mainScreen] scale] == 2.0) ? 16.0 : 20.0);
 //    self.sectionWidth = ((UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) ? 194.0 : 254.0);
+    
+    // section margin
+    self.sectionMargin = UIEdgeInsetsMake(self.hourHeight / 2.0, 0.0, 10.0, 0.0);
     
      self.timeRowHeaderWidth = (([[UIScreen mainScreen] scale] == 2.0) ? 50.0 : 56.0);
     self.sectionWidth = ((UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) ? 194.0 : kScreenWidth - self.timeRowHeaderWidth);
@@ -575,9 +606,9 @@ NSUInteger const USCollectionMinBackgroundZ = 0.0;
     NSDate *nextMinuteBoundary = [[NSCalendar currentCalendar] dateFromComponents:components];
     
     // This needs to be a weak reference, otherwise we get a retain cycle
-//    MSTimerWeakTarget *timerWeakTarget = [[MSTimerWeakTarget alloc] initWithTarget:self selector:@selector(minuteTick:)];
-//    self.minuteTimer = [[NSTimer alloc] initWithFireDate:nextMinuteBoundary interval:60 target:timerWeakTarget selector:timerWeakTarget.fireSelector userInfo:nil repeats:YES];
-//    [[NSRunLoop currentRunLoop] addTimer:self.minuteTimer forMode:NSDefaultRunLoopMode];
+    MSTimerWeakTarget *timerWeakTarget = [[MSTimerWeakTarget alloc] initWithTarget:self selector:@selector(minuteTick:)];
+    self.minuteTimer = [[NSTimer alloc] initWithFireDate:nextMinuteBoundary interval:60 target:timerWeakTarget selector:timerWeakTarget.fireSelector userInfo:nil repeats:YES];
+    [[NSRunLoop currentRunLoop] addTimer:self.minuteTimer forMode:NSDefaultRunLoopMode];
     
     // Added
     self.timeRowBodyBackgroundAttributes = [NSMutableDictionary new];
@@ -587,6 +618,16 @@ NSUInteger const USCollectionMinBackgroundZ = 0.0;
     
     self.cachedDefaultSelectedTimeNumber = 2;
     self.cachedDefaultSelectedTimeSpan = 4;
+}
+
+#pragma mark Minute Updates
+
+- (void)minuteTick:(id)sender
+{
+    NSLog(@"-------------------------minuteTick");
+    // Invalidate cached current date componets (since the minute's changed!)
+//    [self.cachedCurrentDateComponents removeAllObjects];
+    [self invalidateLayout];
 }
 
 #pragma mark Z Index
