@@ -19,9 +19,9 @@
 
 // Added
 #import "USTimeRowBodyBackground.h"
-#import "USMonthButton.h"
-#import "USDayButton.h"
 
+#import "USMonthButtonView.h"
+#import "USDayButtonView.h"
 
 NSString * const USEventCellReuseIdentifier = @"USEventCellReuseIdentifier";
 NSString * const USDayColumnHeaderReuseIdentifier = @"USDayColumnHeaderReuseIdentifier";
@@ -32,14 +32,16 @@ NSString * const USTimeRowHeaderReuseIdentifier = @"USTimeRowHeaderReuseIdentifi
 //    UILabel *yearLabel;
     //    UILabel *monthLabel;
     UIView *selectedMonthView;
-    USMonthButton *selectedMonthButton;
+//    USMonthButton *selectedMonthButton;
     UIScrollView *dateScrollView;
+    
+    USMonthButtonView *selectedMonthButtonView;
 }
 
 @property(nonatomic,strong) USCollectionViewCalendarLayout *collectionViewCalendarLayout;
 @property(nonatomic,strong) UICollectionView *collectionView;
-@property(nonatomic,strong) NSDate *selectedDate;
-@property(nonatomic,strong) NSMutableArray *canSelectedMonthArray;
+//@property(nonatomic,strong) NSDate *selectedDate;
+//@property(nonatomic,strong) NSMutableArray *canSelectedMonthArray;
 @end
 
 @implementation DemoViewController
@@ -48,16 +50,18 @@ NSString * const USTimeRowHeaderReuseIdentifier = @"USTimeRowHeaderReuseIdentifi
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     
-    self.numberOfMonth = 3;
-    self.monthWidth = 56;
-    self.monthHeight = 56;
-    self.dayWidth = 56;
-    self.dayHeight = 56;
-    
-    [self initialize];
+    [self initializeMonthAndDaySelection];
     [self createMonthView];
     [self createDayScrollView];
     
+    // update day scrollview
+    [self updateSelectedMonth:self.selectedMonthDate];
+    
+    // initialize calendar
+    [self initializeCalendar];
+    
+    [self.view bringSubviewToFront:selectedMonthButtonView];
+    [self.view sendSubviewToBack:self.collectionView];
 }
 
 
@@ -76,114 +80,128 @@ NSString * const USTimeRowHeaderReuseIdentifier = @"USTimeRowHeaderReuseIdentifi
 }
 */
 
--(void)initialize1{
-    
-    
-    self.numberOfMonth = 3;
-    self.monthWidth = 56;
-    self.monthHeight = 56;
-    self.dayWidth = 56;
-    self.dayHeight = 56;
-    
-
-
-//    UIView *currentMonthView = [[UIView alloc]initWithFrame:CGRectMake(0, 64, self.monthWidth, self.monthHeight)];
-//    UILabel *currentYearLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 5, CGRectGetWidth(currentMonthView.frame), 20)];
-//    UILabel *currentMonthLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(currentYearLabel.frame) + 3, CGRectGetWidth(currentYearLabel.frame), 20)];
-//    
-//    [currentMonthView addSubview:currentYearLabel];
-//    [currentMonthView addSubview:currentMonthLabel];
-//    [self.view addSubview:currentMonthView];
-    
-    
-//    UIView *monthView = [[UIView alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(currentMonthView.frame), self.monthWidth, self.monthHeight * self.numberOfMonth)];
-//    [monthView setClipsToBounds:YES];
-//    monthView.layer.masksToBounds = YES;
-//    [monthView.layer setBorderColor:[UIColor blueColor].CGColor];
-//    [monthView.layer setBorderWidth:1.0f];
-//    for (int i = 0; i < self.numberOfMonth; i++) {
-//        NSDate *currentDate = [today dateByAddingTimeInterval:i * 24 * 60 * 60];
-//        NSDateComponents *com =  [cal components:NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit fromDate:currentDate];
-//        UIButton *monthButton = [[UIButton alloc]initWithFrame:CGRectMake(0, self.monthHeight * i, self.monthWidth, self.monthHeight)];
-//        [monthButton setTitle:[NSString stringWithFormat:@"%d",com.month] forState:UIControlStateNormal];
-//        [monthButton setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
-//        [monthButton.layer setBorderColor:[UIColor blackColor].CGColor];
-//        [monthButton.layer setBorderWidth:1.0f];
-//        [monthView addSubview:monthButton];
-//    }
-//    [self.view addSubview:monthView];
-    
-    
-    
-//    NSCalendar *calendar = [NSCalendar currentCalendar];
-//    NSDateComponents *comToday =  [cal components:NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit fromDate:today];
-//    
-//    NSRange range = [calendar rangeOfUnit:NSDayCalendarUnit inUnit:NSMonthCalendarUnit forDate:[NSDate date]];
-//    NSUInteger numberOfDaysInMonth = range.length;
-//    NSLog(@"%d",numberOfDaysInMonth);
-//    
-//    CGFloat dayMinX = 0;
-//    CGFloat dayWidth = 64;
-//    CGFloat dayHeight = 64;
-//    
-//    dateScrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(CGRectGetMaxX(monthView.frame), CGRectGetMinY(monthView.frame), kScreenWidth - CGRectGetWidth(monthView.frame), CGRectGetHeight(monthView.frame))];
-//    [dateScrollView.layer setBorderColor:[UIColor yellowColor].CGColor];
-//    [dateScrollView.layer setBorderWidth:1.0f];
-//    [dateScrollView setScrollEnabled:YES];
-//
-//    for (NSInteger day = comToday.day; day <=range.length; day++) {
-//        UIButton *dayButton = [[UIButton alloc]initWithFrame:CGRectMake(dayWidth * (day - comToday.day), 0, dayWidth, dayHeight)];
-//        [dayButton setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
-//        [dayButton setTitle:[NSString stringWithFormat:@"%d",day] forState:UIControlStateNormal];
-//        [dayButton setBackgroundColor:[UIColor orangeColor]];
-//        [dayButton.layer setBorderWidth:1.0f];
-//        [dayButton.layer setBorderColor:[UIColor redColor].CGColor];
-//        [dateScrollView addSubview:dayButton];
-//    }
-//    
-//    [dateScrollView setContentSize:CGSizeMake(dayWidth * (range.length - comToday.day), dayHeight)];
-//    
-//    [self.view addSubview:dateScrollView];
-
-}
-
 
 -(void)createMonthView{
+    self.selectedMonthDate = self.selectedDay = [[NSDate date] dateByAddingDays:10];
+    selectedMonthButtonView = [[USMonthButtonView alloc]initWithFrame:CGRectMake(0, 64, self.monthWidth, self.monthHeight) withIcon:[UIImage imageNamed:@"common_img_arrowDownStroke_normal"]];
+    [self.view addSubview:selectedMonthButtonView];
+    selectedMonthButtonView.isSelected = NO;
+    [selectedMonthButtonView setBackgroundColor:[[UIColor colorWithHexString:@"eeefef"]  colorWithAlphaComponent:0.8f]];
     
-    NSDate *today = [[NSDate date] dateByAddingDays:1];
-    selectedMonthButton = [[USMonthButton alloc]initWithFrame:CGRectMake(0, 64, self.monthWidth, self.monthHeight) withIcon:[UIImage imageNamed:@"common_img_arrowDownStroke_normal"]];
-    [self.view addSubview:selectedMonthButton];
-//    [selectedMonthButton.layer setBorderColor:[UIColor redColor].CGColor];
-//    [selectedMonthButton.layer setBorderWidth:1.0f];
-    [selectedMonthButton setShowDate:today];
-    [selectedMonthButton setBackgroundColor:[[UIColor colorWithHexString:@"eeeeee"] colorWithAlphaComponent:0.8f]];
-    selectedMonthButton.isSelected = NO;
-    [selectedMonthButton addTarget:self action:@selector(monthSelectedAction:) forControlEvents:UIControlEventTouchUpInside];
+    UITapGestureRecognizer *selectedMonthButtonTapGestureRecognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapGestureRecognizerForSelectedMonthButton:)];
+    [selectedMonthButtonView addGestureRecognizer:selectedMonthButtonTapGestureRecognizer];
     
-    CGRect selectedMonthViewFrame = CGRectMake(0, CGRectGetMaxY(selectedMonthButton.frame) - self.monthHeight * 3, self.monthWidth, self.monthHeight * 3);
+    CGRect selectedMonthViewFrame = CGRectMake(0, CGRectGetMaxY(selectedMonthButtonView.frame) - self.monthHeight * 3, self.monthWidth, self.monthHeight * 3);
     selectedMonthView = [[UIView alloc]initWithFrame:selectedMonthViewFrame];
-    [selectedMonthView.layer setBorderWidth:1.0f];
+    CGFloat borderWidth = ([[UIScreen mainScreen] scale] == 2.0 ? 0.5 : 1.0);
+    [selectedMonthView.layer setBorderWidth:borderWidth];
     [selectedMonthView.layer setBorderColor:[[UIColor colorWithHexString:@"939393"] colorWithAlphaComponent:0.8f].CGColor];
     selectedMonthView.alpha = 0;
     [self.view addSubview:selectedMonthView];
-    [self.view bringSubviewToFront:selectedMonthButton];
 
-    if(self.canSelectedMonthArray){
-        for (int i = 0; i < [self.canSelectedMonthArray count]; i++) {
-            USMonthButton *monthButton = [[USMonthButton alloc]initWithFrame:CGRectMake(0, i * self.monthHeight, self.monthWidth, self.monthHeight)];
-            [selectedMonthView addSubview:monthButton];
-//            [monthButton.layer setBorderColor:[UIColor redColor].CGColor];
-//            [monthButton.layer setBorderWidth:1.0f];
-            [monthButton setShowDate:[today dateByAddingMonths:i]];
-            monthButton.isSelected = YES;
-            [monthButton addTarget:self action:@selector(monthSelectedAction:) forControlEvents:UIControlEventTouchUpInside];
-            [selectedMonthView addSubview:monthButton];
-        }
+    for (int i = 0; i < self.numberOfMonthForSelected; i++) {
+        USMonthButtonView *monthButtonView = [[USMonthButtonView alloc]initWithFrame:CGRectMake(0, i * self.monthHeight, self.monthWidth, self.monthHeight)];
+        monthButtonView.tag = i;
+        [monthButtonView setShowMonthDate:[self.selectedMonthDate dateByAddingMonths:i]];
+        monthButtonView.isSelected = i == 0 ? YES:NO;
+        [selectedMonthView addSubview:monthButtonView];
+        
+        UITapGestureRecognizer *monthButtonTapGestureRecognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapGestureRecognizerForMonthButton:)];
+        [monthButtonView addGestureRecognizer:monthButtonTapGestureRecognizer];
     }
 }
 
--(void)monthSelectedAction:(id)sender{
-    NSLog(@"fadfsadf");
+
+-(void)tapGestureRecognizerForMonthButton:(UIGestureRecognizer*)recognizer{
+    CGAffineTransform t = selectedMonthView.transform;
+    [UIView animateWithDuration:0.2f animations:^{
+        if(t.ty == 0){
+            selectedMonthView.alpha = 1;
+            selectedMonthView.transform = CGAffineTransformMakeTranslation(0, self.monthHeight * 3);
+        }else{
+            selectedMonthView.alpha = 0;
+            selectedMonthView.transform = CGAffineTransformIdentity;
+        }
+    }];
+    
+    UIView *selectedView = recognizer.view;
+    USMonthButtonView *selectedButtonView = (USMonthButtonView*)selectedView;
+    
+    if(selectedButtonView.showMonthDate.month != self.selectedDay.month){
+        for (UIView *view in selectedView.superview.subviews) {
+            if([view isKindOfClass:[USMonthButtonView class]] == YES){
+                USMonthButtonView *monthButton = (USMonthButtonView *)view;
+                if(monthButton.isSelected == YES){
+                    monthButton.isSelected = NO;
+                }
+            }
+        }
+        
+        selectedButtonView.isSelected = YES;
+        // show date
+        NSDate *selectedMonth = selectedButtonView.showMonthDate;
+        
+        // update day scrollview
+        [self updateSelectedMonth:selectedMonth];
+    }
+}
+
+// update selected day on scroll view
+-(void)updateSelectedMonth:(NSDate*)selectedMonth{
+    
+    // update selected month
+    [selectedMonthButtonView setShowMonthDate:selectedMonth];
+    
+    if([dateScrollView.subviews count] > 0){
+        [dateScrollView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    }
+    
+    NSDate *startDate = nil;
+    NSDate *today = [[NSDate date] dateByAddingDays:10];
+    
+    if(today.month == selectedMonth.month){
+        startDate = today;
+    }else{
+        startDate = [selectedMonth beginningOfMonth];
+    }
+
+    NSDate *endDate = [startDate endOfMonth];
+    NSInteger daySpan = [endDate timeIntervalSinceDate:startDate] / (60 * 60  *24);
+    
+    for (NSInteger index = 0; index <= daySpan; index++) {
+        USDayButtonView *dayButtonView = [[USDayButtonView alloc]initWithFrame:CGRectMake(self.dayWidth * index, 0, self.dayWidth, self.dayHeight)];
+        dayButtonView.tag = index;
+        NSDate *currentDate = [startDate dateByAddingDays:index];
+        BOOL isSelected =  [currentDate isEqualToDateIgnoringTime:startDate];
+        if(isSelected == YES){
+            self.selectedDay = currentDate;
+        }
+        dayButtonView.isSelected = isSelected;
+        [dayButtonView setShowDate:currentDate];
+        [dateScrollView addSubview:dayButtonView];
+        
+        UITapGestureRecognizer *dayButtonTapGestureRecognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapGestureRecognizerForDayButton:)];
+        [dayButtonView addGestureRecognizer:dayButtonTapGestureRecognizer];
+    }
+    
+    [dateScrollView setContentSize:CGSizeMake(self.dayWidth * (daySpan + 1), self.dayHeight)];
+    
+    NSInteger offsetDay = 0;
+    if(self.selectedDay.month == today.month){
+        offsetDay = self.selectedDay.day - today.day;
+    }else{
+        offsetDay = self.selectedDay.day - [selectedMonth beginningOfMonth].day;
+    }
+    
+    CGFloat  offsetX = self.dayWidth * offsetDay;
+    [UIView animateWithDuration:0.2f animations:^{
+        [dateScrollView setContentOffset:CGPointMake(offsetX, 0)];
+    }];
+    
+    [self setOpeningDate];
+}
+
+-(void)tapGestureRecognizerForSelectedMonthButton:(UIGestureRecognizer*)recognizer{
     CGAffineTransform t = selectedMonthView.transform;
     [UIView animateWithDuration:0.2f animations:^{
         if(t.ty == 0){
@@ -196,58 +214,51 @@ NSString * const USTimeRowHeaderReuseIdentifier = @"USTimeRowHeaderReuseIdentifi
     }];
 }
 
-//-(void)tapGestureReconizerForDefaultMonth:(UIGestureRecognizer*)recognizer{
-////    selectedMonthView.transform
-//    CGAffineTransform trans = selectedMonthView.transform;
-//    if(trans.ty == CGAffineTransformIdentity.ty){
-//        selectedMonthView.transform = CGAffineTransformMakeTranslation(0, CGRectGetHeight(selectedMonthView.frame));
-//    }else{
-//        selectedMonthView.transform = CGAffineTransformIdentity;
-//    }
-//}
-
 -(void)createDayScrollView{
-    CGRect selectedMonthButtonFrame = selectedMonthButton.frame;
+    CGRect selectedMonthButtonFrame = selectedMonthButtonView.frame;
     CGFloat dateScrollViewWidth = kScreenWidth - CGRectGetWidth(selectedMonthButtonFrame);
     self.dayWidth = dateScrollViewWidth / 7;
     dateScrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(CGRectGetMaxX(selectedMonthButtonFrame), CGRectGetMinY(selectedMonthButtonFrame), dateScrollViewWidth, CGRectGetHeight(selectedMonthButtonFrame))];
-//    [dateScrollView.layer setBorderColor:[UIColor yellowColor].CGColor];
-//    [dateScrollView.layer setBorderWidth:1.0f];
     dateScrollView.showsHorizontalScrollIndicator = NO;
     dateScrollView.showsVerticalScrollIndicator = NO;
     [dateScrollView setScrollEnabled:YES];
     
-    NSDate *today = [[NSDate date] dateByAddingDays:1];
-    NSDate *dateAtEndOfDay = [today endOfMonth];
-    
-    
-    for (NSInteger index = 0; index <=(dateAtEndOfDay.day - today.day); index++) {
-        USDayButton *dayButton = [[USDayButton alloc]initWithFrame:CGRectMake(self.dayWidth * index, 0, self.dayWidth, self.dayHeight)];
-        [dayButton setShowDate:[today dateByAddingDays:index]];
-        [dateScrollView addSubview:dayButton];
-    }
-    
-    [dateScrollView setContentSize:CGSizeMake(self.dayWidth * (dateAtEndOfDay.day - today.day + 1), self.dayHeight)];
-    
     [self.view addSubview:dateScrollView];
 }
 
-
-
-
-
-
-
-
-
-#pragma mark <UICollectionViewDataSource>
-
-- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
-#warning Incomplete implementation, return the number of sections
+-(void)tapGestureRecognizerForDayButton:(UIGestureRecognizer*)recognizer{
+    UIView *view = recognizer.view;
+    for (UIView *subview in view.superview.subviews) {
+        USDayButtonView *dayButtonView = (USDayButtonView*)subview;
+        if(dayButtonView.isSelected == YES){
+            dayButtonView.isSelected = NO;
+            break;
+        }
+    }
     
-    return 1;
+    USDayButtonView *selectedDayButtonView = (USDayButtonView*)view;
+    selectedDayButtonView.isSelected = YES;
+    self.selectedDay = selectedDayButtonView.showDate;
+    
+    [self setOpeningDate];
 }
 
+-(void)setOpeningDate{
+    // update time span selected uiview
+    NSDateFormatter *formatter = [[NSDateFormatter alloc]init];
+    [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    [formatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:8]];
+    
+    NSDate *tomorrow = [self.selectedDay dateByAddingDays:1];
+    self.beginningDateForOpening =  [formatter dateFromString:[NSString stringWithFormat:@"%d-%d-%d 9:00:00", self.selectedDay.year, self.selectedDay.month,self.selectedDay.day]];
+    self.endDateForOpening =  [formatter dateFromString:[NSString stringWithFormat:@"%d-%d-%d 12:00:00", tomorrow.year, tomorrow.month, tomorrow.day]];
+}
+
+#pragma mark <UICollectionViewDataSource>
+- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
+#warning Incomplete implementation, return the number of sections
+    return 1;
+}
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
 #warning Incomplete implementation, return the number of items
@@ -287,30 +298,25 @@ NSString * const USTimeRowHeaderReuseIdentifier = @"USTimeRowHeaderReuseIdentifi
 }
 
 #pragma mark <UICollectionViewDelegate>
--(void)initialize{
+-(void)initializeMonthAndDaySelection{
     
-    
-    self.canSelectedMonthArray = [NSMutableArray array];
-   
-    
-    NSCalendar *currentCalender = [NSCalendar currentCalendar];
-    NSDateComponents *com = [currentCalender components:NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit fromDate:[NSDate date]];
-    
-    NSDateFormatter *formatter = [[NSDateFormatter alloc]init];
-    [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-     NSDate *january = [formatter dateFromString:@"2016-1-1 00:00:00"];
-    NSDate *february = [formatter dateFromString:@"2016-2-1 00:00:00"];
-    NSDate *march = [formatter dateFromString:@"2016-3-1 00:00:00"];
-    [self.canSelectedMonthArray addObject:january];
-    [self.canSelectedMonthArray addObject:february];
-    [self.canSelectedMonthArray addObject:march];
-    
+    // month and date selection
+    self.numberOfMonthForSelected = 3;
+    CGFloat scale = [[UIScreen mainScreen] scale];
+    self.monthWidth = scale == 2.0 ? 50.0 : 56.0;
+    self.monthHeight = scale == 2.0 ? 50.0 : 56.0;
+    self.dayWidth = scale == 2.0 ? 50.0 : 56.0;
+    self.dayHeight = scale == 2.0 ? 50.0 : 56.0;
+}
 
+-(void)initializeCalendar{
+    // time selection
     USCollectionViewCalendarLayout *layout = [[USCollectionViewCalendarLayout alloc]init];
     self.collectionViewCalendarLayout = layout;
     layout.sectionLayoutType = USSectionLayoutTypeHorizontalTile;
     layout.delegate = self;
-    self.collectionView = [[UICollectionView alloc]initWithFrame:CGRectMake(0, 100, kScreenWidth, kScreenHeight - 100 - 60) collectionViewLayout:layout];
+    CGFloat timeSelectedMinY = CGRectGetMaxY(selectedMonthButtonView.frame);
+    self.collectionView = [[UICollectionView alloc]initWithFrame:CGRectMake(0, timeSelectedMinY, kScreenWidth, kScreenHeight - timeSelectedMinY - 60) collectionViewLayout:layout];
     self.collectionView.showsVerticalScrollIndicator = NO;
     self.collectionView.showsHorizontalScrollIndicator = NO;
     self.collectionView.delegate =self;
@@ -340,15 +346,12 @@ NSString * const USTimeRowHeaderReuseIdentifier = @"USTimeRowHeaderReuseIdentifi
     self.eventRuleArray = [NSMutableArray array];
     self.eventOpenningTimeArray = [NSMutableArray array];
     [self createOpenningTime];
-    
-    
 }
 
 #pragma mark - USCollectionViewCalendarLayout
 
 - (NSDate *)collectionView:(UICollectionView *)collectionView layout:(USCollectionViewCalendarLayout *)collectionViewCalendarLayout dayForSection:(NSInteger)section
 {
-    
     NSDateFormatter *formatter = [[NSDateFormatter alloc]init];
     [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
     [formatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:8]];
@@ -359,20 +362,20 @@ NSString * const USTimeRowHeaderReuseIdentifier = @"USTimeRowHeaderReuseIdentifi
 
 - (NSDate *)collectionView:(UICollectionView *)collectionView layout:(USCollectionViewCalendarLayout *)collectionViewCalendarLayout startTimeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSDateFormatter *formatter = [[NSDateFormatter alloc]init];
-    [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-    [formatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:8]];
-    NSDate *startTime = [formatter dateFromString:@"2016-1-26 9:00:00"];
-    return startTime;
+//    NSDateFormatter *formatter = [[NSDateFormatter alloc]init];
+//    [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+//    [formatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:8]];
+//    NSDate *startTime = [formatter dateFromString:@"2016-1-26 9:00:00"];
+    return self.beginningDateForOpening;
 }
 
 - (NSDate *)collectionView:(UICollectionView *)collectionView layout:(USCollectionViewCalendarLayout *)collectionViewCalendarLayout endTimeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSDateFormatter *formatter = [[NSDateFormatter alloc]init];
-    [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-    [formatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:8]];
-    NSDate *endTime = [formatter dateFromString:@"2016-1-27 12:00:00"];
-    return endTime;
+//    NSDateFormatter *formatter = [[NSDateFormatter alloc]init];
+//    [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+//    [formatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:8]];
+//    NSDate *endTime = [formatter dateFromString:@"2016-1-27 12:00:00"];
+    return self.endDateForOpening;
 }
 
 -(NSTimeInterval)collectionView:(UICollectionView *)collectionView layout:(USCollectionViewCalendarLayout *)collectionViewLayout{

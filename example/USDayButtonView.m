@@ -1,56 +1,65 @@
 //
-//  USDayButton.m
+//  USDayButtonView.m
 //  example
 //
-//  Created by 赵兴满 on 16/1/31.
+//  Created by 赵兴满 on 16/2/1.
 //  Copyright © 2016年 zhaoxingman. All rights reserved.
 //
 
-#import "USDayButton.h"
-@interface USDayButton()
+#import "USDayButtonView.h"
+@interface USDayButtonView()
 {
     UILabel *weekLabel;
     UILabel *dayLabel;
 }
 @end
-@implementation USDayButton
+
+@implementation USDayButtonView
 
 -(id)initWithFrame:(CGRect)frame{
     self = [super initWithFrame:frame];
     if(self){
-        self.contentEdgeInsets = UIEdgeInsetsMake(6, 0, 6, 0);
+        UIEdgeInsets contentEdgeInsets = UIEdgeInsetsMake(6, 0, 6, 0);
         
         CGFloat labelWidth = CGRectGetWidth(frame);
-        CGFloat weekLabelMinY = self.contentEdgeInsets.top;
-        CGFloat weekLabelHeight =  (CGRectGetHeight(frame) - self.contentEdgeInsets.top - self.contentEdgeInsets.bottom) / 2.0;
+        CGFloat weekLabelMinY = contentEdgeInsets.top;
+        CGFloat weekLabelHeight =  (CGRectGetHeight(frame) - contentEdgeInsets.top - contentEdgeInsets.bottom) / 2.0;
         
         weekLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, weekLabelMinY, labelWidth, weekLabelHeight)];
         [weekLabel setText:@""];
-        [weekLabel setFont:[UIFont systemFontOfSize:16.0f]];
+        CGFloat weekFontOfSize = (([[UIScreen mainScreen] scale] == 2.0) ? 12.0 : 16.0);
+        [weekLabel setFont:[UIFont systemFontOfSize:weekFontOfSize]];
         [weekLabel setTextAlignment:NSTextAlignmentCenter];
         [self addSubview:weekLabel];
         
         CGRect weekFrame = weekLabel.frame;
         dayLabel = [[UILabel alloc]initWithFrame:CGRectMake(CGRectGetMinX(weekFrame), CGRectGetMaxY(weekFrame), labelWidth, CGRectGetHeight(weekFrame))];
         [dayLabel setText:@""];
-        [dayLabel setFont:[UIFont systemFontOfSize:24.0f]];
+        
+        CGFloat dayFontOfSize = (([[UIScreen mainScreen] scale] == 2.0) ? 18.0 : 24.0);
+        [dayLabel setFont:[UIFont systemFontOfSize:dayFontOfSize]];
         [dayLabel setTextAlignment:NSTextAlignmentCenter];
         [self addSubview:dayLabel];
         
-        CGRect topLayerBounds = CGRectMake(0, 0, self.bounds.size.width, 1.0f);
+        CGFloat scale = [[UIScreen mainScreen] scale];
+        CGFloat topLayerHeight = (scale == 2.0 ? 0.5f : 1.0f);
+        CGRect topLayerBounds = CGRectMake(0, 0, self.bounds.size.width, topLayerHeight);
         CGPoint topLayerPosition = CGPointMake(0, 0);
         [self addBorderBounds:topLayerBounds withPosition:topLayerPosition];
         
-        CGRect bottomLayerBounds = CGRectMake(0, self.bounds.size.height - 1.0, self.bounds.size.width, 1.0f);
-        CGPoint bottomLayerPosition = CGPointMake(0, self.bounds.size.height - 1.0);
+        CGFloat bottomLayerHeight = (scale == 2.0 ? 0.5f : 1.0f);
+        CGRect bottomLayerBounds = CGRectMake(0, self.bounds.size.height - 1.0, self.bounds.size.width, bottomLayerHeight);
+        CGPoint bottomLayerPosition = CGPointMake(0, self.bounds.size.height - bottomLayerHeight);
         [self addBorderBounds:bottomLayerBounds withPosition:bottomLayerPosition];
         
-        CGRect leftLayerBounds = CGRectMake(0, 0, 0.5f, self.bounds.size.height);
+        CGFloat leftLayerWidth = (scale == 2.0 ? 0.25f : 0.5f);
+        CGRect leftLayerBounds = CGRectMake(0, 0, leftLayerWidth, self.bounds.size.height);
         CGPoint leftLayerPosition = CGPointMake(0, 0);
         [self addBorderBounds:leftLayerBounds withPosition:leftLayerPosition];
         
-        CGRect rightLayerBounds = CGRectMake(self.bounds.size.width - 0.5, 0, 0.5f, self.bounds.size.height);
-        CGPoint rightLayerPosition = CGPointMake(self.bounds.size.width - 0.5, 0);
+        CGFloat rightLayerWidth = (scale == 2.0 ? 0.25f : 0.5f);
+        CGRect rightLayerBounds = CGRectMake(self.bounds.size.width - rightLayerWidth, 0, rightLayerWidth, self.bounds.size.height);
+        CGPoint rightLayerPosition = CGPointMake(self.bounds.size.width - rightLayerWidth, 0);
         [self addBorderBounds:rightLayerBounds withPosition:rightLayerPosition];
     }
     return self;
@@ -67,19 +76,21 @@
 }
 
 -(void)setShowDate:(NSDate *)showDate{
-    if(showDate){
+    _showDate = showDate;
+    if(_showDate){
         
         NSDateFormatter *formatter = [[NSDateFormatter alloc]init];
         [formatter setDateFormat:@"EEE"];
         NSString *week = [formatter stringFromDate:showDate];
         
-//        [weekLabel setText:[NSString stringWithFormat:@"%d",showDate.weekday]];
+        //        [weekLabel setText:[NSString stringWithFormat:@"%d",showDate.weekday]];
         [weekLabel setText:week];
         [dayLabel setText:[NSString stringWithFormat:@"%d",showDate.day]];
     }
 }
 
 -(void)setIsSelected:(BOOL)isSelected{
+    _isSelected = isSelected;
     self.backgroundColor = [self backgroundHighlightColor];
     [weekLabel setTextColor:[self foregroundHightColor]];
     [dayLabel setTextColor:[self foregroundHightColor]];
@@ -87,15 +98,12 @@
 }
 
 -(UIColor*)backgroundHighlightColor{
-    return self.isSelected ? [[UIColor colorWithHexString:@"e9466b"] colorWithAlphaComponent:0.8] : [UIColor whiteColor];
+    return self.isSelected ? [UIColor colorWithHexString:@"e9466b"] : [UIColor whiteColor];
 }
 
 -(UIColor*)foregroundHightColor{
-    return self.isSelected ? [UIColor whiteColor] : [UIColor colorWithHexString:@"383a3a"];
+    return self.isSelected ? [UIColor whiteColor] : [UIColor colorWithHexString:@"5f6060"];
 }
-
-
-
 /*
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.

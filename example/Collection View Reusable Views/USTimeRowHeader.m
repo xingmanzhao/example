@@ -17,7 +17,8 @@
         self.backgroundColor = [UIColor clearColor];
         self.title = [UILabel new];
         self.title.backgroundColor = [UIColor clearColor];
-        self.title.font = [UIFont boldSystemFontOfSize:10.0];
+       CGFloat titleFontOfSize = (([[UIScreen mainScreen] scale] == 2.0) ? 10.0 : 13.0);
+        self.title.font = [UIFont boldSystemFontOfSize:titleFontOfSize];
         [self.title setTextColor:[UIColor colorWithHexString:@"aaaaaa"]];
         [self.title setTextAlignment: NSTextAlignmentRight];
         [self addSubview:self.title];

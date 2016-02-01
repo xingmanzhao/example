@@ -10,6 +10,8 @@
 
 @interface USEventCell ()
 {
+    UIButton *topDragButton;
+    UIButton *bottomDragButton;
     CALayer *topLayer;
 //    CALayer *bottomLayer;
 }
@@ -44,19 +46,19 @@
     CGFloat xForTopButton = widthForCell * 0.8;
     CGFloat yForTopButton = -heightForButton / 2;
     
-    UIButton *topButton = [[UIButton alloc]initWithFrame:CGRectMake(xForTopButton , yForTopButton, widthForButton, heightForButton)];
-    [topButton setTitle:@"" forState:UIControlStateNormal];
-    [topButton setBackgroundColor:[UIColor whiteColor]];
-    [topButton.layer setBorderColor:[UIColor colorWithHexString:@"1fa561"].CGColor];
-    [topButton.layer setBorderWidth:2.0f];
-    [topButton.layer setCornerRadius:topButton.bounds.size.width / 2];
-    [self addSubview:topButton];
+    topDragButton = [[UIButton alloc]initWithFrame:CGRectMake(xForTopButton , yForTopButton, widthForButton, heightForButton)];
+    [topDragButton setTitle:@"" forState:UIControlStateNormal];
+    [topDragButton setBackgroundColor:[UIColor whiteColor]];
+    [topDragButton.layer setBorderColor:[UIColor colorWithHexString:@"e9466b"].CGColor];
+    [topDragButton.layer setBorderWidth:2.0f];
+    [topDragButton.layer setCornerRadius:topDragButton.bounds.size.width / 2];
+    [self addSubview:topDragButton];
     
     // Top Button Pan Gesture Recognizer
     UIPanGestureRecognizer *topButtonPanGestureRecognizer = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(panGestureRecognizerForTopButton:)];
-    [topButton addGestureRecognizer:topButtonPanGestureRecognizer];
+    [topDragButton addGestureRecognizer:topButtonPanGestureRecognizer];
     
-    [topButton makeConstraints:^(MASConstraintMaker *make) {
+    [topDragButton makeConstraints:^(MASConstraintMaker *make) {
         make.height.equalTo(@(26));
         make.width.equalTo(@(26));
         make.right.equalTo(self.mas_right).with.offset(-30);
@@ -67,15 +69,15 @@
     CGFloat xForBottomButton = widthForCell * 0.2 - widthForButton;
     CGFloat yForBottomButton = heightForCell - heightForButton / 2;
     
-    UIButton *bottomButton = [[UIButton alloc]initWithFrame:CGRectMake(xForBottomButton , yForBottomButton, widthForButton, heightForButton)];
-    [bottomButton setTitle:@"" forState:UIControlStateNormal];
-    [bottomButton setBackgroundColor:[UIColor whiteColor]];
-    [bottomButton.layer setBorderColor:[UIColor colorWithHexString:@"1fa561"].CGColor];
-    [bottomButton.layer setBorderWidth:2.0f];
-    [bottomButton.layer setCornerRadius:bottomButton.bounds.size.width / 2];
-    [self addSubview:bottomButton];
+    bottomDragButton = [[UIButton alloc]initWithFrame:CGRectMake(xForBottomButton , yForBottomButton, widthForButton, heightForButton)];
+    [bottomDragButton setTitle:@"" forState:UIControlStateNormal];
+    [bottomDragButton setBackgroundColor:[UIColor whiteColor]];
+    [bottomDragButton.layer setBorderColor:[UIColor colorWithHexString:@"e9466b"].CGColor];
+    [bottomDragButton.layer setBorderWidth:2.0f];
+    [bottomDragButton.layer setCornerRadius:bottomDragButton.bounds.size.width / 2];
+    [self addSubview:bottomDragButton];
     
-    [bottomButton makeConstraints:^(MASConstraintMaker *make) {
+    [bottomDragButton makeConstraints:^(MASConstraintMaker *make) {
         make.height.equalTo(@(26));
         make.width.equalTo(@(26));
         make.left.equalTo(self.mas_left).with.offset(30);
@@ -84,7 +86,7 @@
     
     // Bottom Button Pan Gesture Recognizer
     UIPanGestureRecognizer *bottomButtonPanGestureRecognizer = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(panGestureRecognizerForBottomButton:)];
-    [bottomButton addGestureRecognizer:bottomButtonPanGestureRecognizer];
+    [bottomDragButton addGestureRecognizer:bottomButtonPanGestureRecognizer];
 
     // Cell Pan Gesture Recognizer
     UIPanGestureRecognizer *cellPanGestureRecognizer = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(panGestureRecognizerForCell:)];
@@ -135,7 +137,8 @@
 }
 
 -(void)addBorderLayer{
-    CGFloat borderHeight = 3.0f;
+    
+    CGFloat borderHeight = ([[UIScreen mainScreen] scale] == 2.0 ? 2.0f : 3.0f);
     topLayer = [CALayer layer];
     [topLayer setBounds:CGRectMake(0, 0, self.bounds.size.width, borderHeight)];
     [topLayer setPosition:CGPointMake(0, 0)];
@@ -165,13 +168,9 @@
         [topLayer setBackgroundColor:[self borderColorOrdered:self.isOrdered].CGColor];
         [topLayer setPosition: CGPointMake(0,0)];
     }
-//    if(bottomLayer){
-//        [bottomLayer setBackgroundColor:[self borderColorOrdered:self.isOrdered].CGColor];
-//        [bottomLayer setPosition: CGPointMake(0,self.bounds.size.height - bottomLayer.bounds.size.height)];
-//    }
-//    [self setBorderWithColor:[self borderColorOrdered:self.isOrdered] andWidth:3.0f];
-//    [self.layer setBorderColor:[self borderColorOrdered:self.isOrdered].CGColor];
-//    [self.layer setBorderWidth:2.0f];
+    
+    [topDragButton.layer setBorderColor:[self dragButtonBorderColorOrdered:self.isOrdered].CGColor];
+    [bottomDragButton.layer setBorderColor:[self dragButtonBorderColorOrdered:self.isOrdered].CGColor];
     [self setNeedsLayout];
 }
 
@@ -180,12 +179,6 @@
     if(topLayer){
         [topLayer setBackgroundColor:[self borderColorOrdered:NO].CGColor];
     }
-//    if(bottomLayer){
-//        [bottomLayer setBackgroundColor:[self borderColorOrdered:NO].CGColor];
-//    }
-//    [self setBorderWithColor:[self borderColorOrdered:NO] andWidth:3.0f];
-//    [self.layer setBorderColor:[self borderColorOrdered:NO].CGColor];
-//    [self.layer setBorderWidth:2.0f];
     [self setNeedsLayout];
 }
 
@@ -215,17 +208,25 @@
 
 - (UIColor *)backgroundColorHighlighted:(BOOL)selected{
     //item选中时的颜色
-    return selected ? [[UIColor colorWithHexString:@"32a46a"]  colorWithAlphaComponent:0.8]: [[UIColor colorWithHexString:@"63c191"] colorWithAlphaComponent:0.6];
+//    return selected ? [[UIColor colorWithHexString:@"32a46a"]  colorWithAlphaComponent:0.8]: [[UIColor colorWithHexString:@"63c191"] colorWithAlphaComponent:0.6];
+    return selected ? [[UIColor colorWithHexString:@"e9466b"]  colorWithAlphaComponent:0.8]: [[UIColor colorWithHexString:@"e9466b"] colorWithAlphaComponent:0.6];
 }
 
 - (UIColor *)backgroundColorOrdered:(BOOL)ordered{
     //item选中时的颜色
-    return ordered ? [[UIColor colorWithHexString:@"ec8788"] colorWithAlphaComponent:0.8] : [[UIColor colorWithHexString:@"63c191"] colorWithAlphaComponent:0.6];
+//    return ordered ? [[UIColor colorWithHexString:@"ec8788"] colorWithAlphaComponent:0.8] : [[UIColor colorWithHexString:@"63c191"] colorWithAlphaComponent:0.6];
+    return ordered ? [[UIColor colorWithHexString:@"595959"] colorWithAlphaComponent:0.5] : [[UIColor colorWithHexString:@"e9466b"] colorWithAlphaComponent:0.6];
+}
+
+- (UIColor *)dragButtonBorderColorOrdered:(BOOL)ordered{
+    //item选中时的颜色
+    return ordered ? [UIColor colorWithHexString:@"595959"] : [UIColor colorWithHexString:@"e9466b"];
 }
 
 - (UIColor *)borderColorOrdered:(BOOL)ordered{
     //item选中时的颜色
-    return ordered ? [[UIColor colorWithHexString:@"e35354"]  colorWithAlphaComponent:0.8] : [[UIColor colorWithHexString:@"1fa561"]  colorWithAlphaComponent:0.6];
+//    return ordered ? [[UIColor colorWithHexString:@"e35354"]  colorWithAlphaComponent:0.8] : [[UIColor colorWithHexString:@"1fa561"]  colorWithAlphaComponent:0.6];
+    return ordered ? [[UIColor colorWithHexString:@"595959"]  colorWithAlphaComponent:0.5] : [[UIColor colorWithHexString:@"e9466b"]  colorWithAlphaComponent:0.6];
 }
 
 - (UIColor *)textColorHighlighted:(BOOL)selected{

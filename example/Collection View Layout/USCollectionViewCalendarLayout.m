@@ -553,11 +553,12 @@ NSUInteger const USCollectionMinBackgroundZ = 0.0;
     self.horizontalGridlineAttributes = [NSMutableDictionary new];
     
     // section margin
-    self.sectionMargin = UIEdgeInsetsMake(36.0, 0.0, 10.0, 0.0);
+    self.sectionMargin = UIEdgeInsetsMake(30.0, 0.0, 10.0, 0.0);
     
     self.hourHeight = ((UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) ? 20.0 : 16.0);
 //    self.sectionWidth = ((UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) ? 194.0 : 254.0);
-    self.timeRowHeaderWidth = 56.0;
+    
+     self.timeRowHeaderWidth = (([[UIScreen mainScreen] scale] == 2.0) ? 50.0 : 56.0);
     self.sectionWidth = ((UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) ? 194.0 : kScreenWidth - self.timeRowHeaderWidth);
     self.calendarGridWidth = kScreenWidth - self.sectionMargin.left - self.timeRowHeaderWidth - self.sectionMargin.right;
     

@@ -15,10 +15,10 @@
 		D40178FF1C53B55E0063A23E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D40178FD1C53B55E0063A23E /* LaunchScreen.storyboard */; };
 		D401790A1C53B55E0063A23E /* exampleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D40179091C53B55E0063A23E /* exampleTests.m */; };
 		D40179151C53B55E0063A23E /* exampleUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = D40179141C53B55E0063A23E /* exampleUITests.m */; };
+		D41F28281C5EEEB600B6F2D0 /* USMonthButtonView.m in Sources */ = {isa = PBXBuildFile; fileRef = D41F28271C5EEEB600B6F2D0 /* USMonthButtonView.m */; };
 		D43D12131C560DED001EF40D /* USTimeRowBodyBackground.m in Sources */ = {isa = PBXBuildFile; fileRef = D43D12121C560DED001EF40D /* USTimeRowBodyBackground.m */; };
 		D487613F1C58F1A300DCE764 /* USEventRule.m in Sources */ = {isa = PBXBuildFile; fileRef = D487613E1C58F1A300DCE764 /* USEventRule.m */; };
 		D48E44671C5E3D97001171F3 /* NSDate+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = D48E44641C5E3D97001171F3 /* NSDate+Utilities.m */; };
-		D48E446B1C5E42F3001171F3 /* USDayButton.m in Sources */ = {isa = PBXBuildFile; fileRef = D48E446A1C5E42F3001171F3 /* USDayButton.m */; };
 		D49E87D41C54EAA6002D1694 /* AFHTTPClient.m in Sources */ = {isa = PBXBuildFile; fileRef = D49E86FF1C54EAA6002D1694 /* AFHTTPClient.m */; };
 		D49E87D51C54EAA6002D1694 /* AFHTTPRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = D49E87011C54EAA6002D1694 /* AFHTTPRequestOperation.m */; };
 		D49E87D61C54EAA6002D1694 /* AFImageRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = D49E87031C54EAA6002D1694 /* AFImageRequestOperation.m */; };
@@ -112,13 +112,13 @@
 		D49E889B1C555D11002D1694 /* USGridline.m in Sources */ = {isa = PBXBuildFile; fileRef = D49E88921C555D11002D1694 /* USGridline.m */; };
 		D49E889C1C555D11002D1694 /* USTimeRowHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = D49E88941C555D11002D1694 /* USTimeRowHeader.m */; };
 		D49E889D1C555D11002D1694 /* USTimeRowHeaderBackground.m in Sources */ = {isa = PBXBuildFile; fileRef = D49E88961C555D11002D1694 /* USTimeRowHeaderBackground.m */; };
+		D4D3A14F1C5F0E9600F3B762 /* USDayButtonView.m in Sources */ = {isa = PBXBuildFile; fileRef = D4D3A14E1C5F0E9600F3B762 /* USDayButtonView.m */; };
 		D4F1AE161C5B5639000C5347 /* DemoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D4F1AE141C5B5639000C5347 /* DemoViewController.m */; };
 		D4F1AE171C5B5639000C5347 /* DemoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D4F1AE151C5B5639000C5347 /* DemoViewController.xib */; };
 		D4F911C21C5C462C0009A6F2 /* USMonthController.m in Sources */ = {isa = PBXBuildFile; fileRef = D4F911C11C5C462C0009A6F2 /* USMonthController.m */; };
 		D4F911C51C5C46560009A6F2 /* USBaseCalendarController.m in Sources */ = {isa = PBXBuildFile; fileRef = D4F911C41C5C46560009A6F2 /* USBaseCalendarController.m */; };
 		D4F911C81C5C46E60009A6F2 /* USDayController.m in Sources */ = {isa = PBXBuildFile; fileRef = D4F911C71C5C46E60009A6F2 /* USDayController.m */; };
 		D4F911CB1C5C46FA0009A6F2 /* USTimeController.m in Sources */ = {isa = PBXBuildFile; fileRef = D4F911CA1C5C46FA0009A6F2 /* USTimeController.m */; };
-		D4F911CF1C5DB2EA0009A6F2 /* USMonthButton.m in Sources */ = {isa = PBXBuildFile; fileRef = D4F911CE1C5DB2EA0009A6F2 /* USMonthButton.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -155,14 +155,14 @@
 		D40179101C53B55E0063A23E /* exampleUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = exampleUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D40179141C53B55E0063A23E /* exampleUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = exampleUITests.m; sourceTree = "<group>"; };
 		D40179161C53B55E0063A23E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D41F28261C5EEEB600B6F2D0 /* USMonthButtonView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = USMonthButtonView.h; sourceTree = "<group>"; };
+		D41F28271C5EEEB600B6F2D0 /* USMonthButtonView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = USMonthButtonView.m; sourceTree = "<group>"; };
 		D43D12111C560DED001EF40D /* USTimeRowBodyBackground.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = USTimeRowBodyBackground.h; path = "Collection View Reusable Views/USTimeRowBodyBackground.h"; sourceTree = "<group>"; };
 		D43D12121C560DED001EF40D /* USTimeRowBodyBackground.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = USTimeRowBodyBackground.m; path = "Collection View Reusable Views/USTimeRowBodyBackground.m"; sourceTree = "<group>"; };
 		D487613D1C58F1A300DCE764 /* USEventRule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = USEventRule.h; path = example/Model/USEventRule.h; sourceTree = SOURCE_ROOT; };
 		D487613E1C58F1A300DCE764 /* USEventRule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = USEventRule.m; path = example/Model/USEventRule.m; sourceTree = SOURCE_ROOT; };
 		D48E44631C5E3D97001171F3 /* NSDate+Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+Utilities.h"; sourceTree = "<group>"; };
 		D48E44641C5E3D97001171F3 /* NSDate+Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+Utilities.m"; sourceTree = "<group>"; };
-		D48E44691C5E42F3001171F3 /* USDayButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = USDayButton.h; sourceTree = "<group>"; };
-		D48E446A1C5E42F3001171F3 /* USDayButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = USDayButton.m; sourceTree = "<group>"; };
 		D49E86FE1C54EAA6002D1694 /* AFHTTPClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPClient.h; sourceTree = "<group>"; };
 		D49E86FF1C54EAA6002D1694 /* AFHTTPClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFHTTPClient.m; sourceTree = "<group>"; };
 		D49E87001C54EAA6002D1694 /* AFHTTPRequestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPRequestOperation.h; sourceTree = "<group>"; };
@@ -369,6 +369,8 @@
 		D49E88941C555D11002D1694 /* USTimeRowHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = USTimeRowHeader.m; path = "Collection View Reusable Views/USTimeRowHeader.m"; sourceTree = "<group>"; };
 		D49E88951C555D11002D1694 /* USTimeRowHeaderBackground.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = USTimeRowHeaderBackground.h; path = "Collection View Reusable Views/USTimeRowHeaderBackground.h"; sourceTree = "<group>"; };
 		D49E88961C555D11002D1694 /* USTimeRowHeaderBackground.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = USTimeRowHeaderBackground.m; path = "Collection View Reusable Views/USTimeRowHeaderBackground.m"; sourceTree = "<group>"; };
+		D4D3A14D1C5F0E9600F3B762 /* USDayButtonView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = USDayButtonView.h; sourceTree = "<group>"; };
+		D4D3A14E1C5F0E9600F3B762 /* USDayButtonView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = USDayButtonView.m; sourceTree = "<group>"; };
 		D4F1AE131C5B5639000C5347 /* DemoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DemoViewController.h; path = "View Controllers/DemoViewController.h"; sourceTree = "<group>"; };
 		D4F1AE141C5B5639000C5347 /* DemoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DemoViewController.m; path = "View Controllers/DemoViewController.m"; sourceTree = "<group>"; };
 		D4F1AE151C5B5639000C5347 /* DemoViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = DemoViewController.xib; path = "View Controllers/DemoViewController.xib"; sourceTree = "<group>"; };
@@ -380,8 +382,6 @@
 		D4F911C71C5C46E60009A6F2 /* USDayController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = USDayController.m; path = "View Controllers/USDayController.m"; sourceTree = "<group>"; };
 		D4F911C91C5C46FA0009A6F2 /* USTimeController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = USTimeController.h; path = "View Controllers/USTimeController.h"; sourceTree = "<group>"; };
 		D4F911CA1C5C46FA0009A6F2 /* USTimeController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = USTimeController.m; path = "View Controllers/USTimeController.m"; sourceTree = "<group>"; };
-		D4F911CD1C5DB2EA0009A6F2 /* USMonthButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = USMonthButton.h; sourceTree = "<group>"; };
-		D4F911CE1C5DB2EA0009A6F2 /* USMonthButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = USMonthButton.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -915,10 +915,10 @@
 		D4F911CC1C5DB2C60009A6F2 /* Button */ = {
 			isa = PBXGroup;
 			children = (
-				D4F911CD1C5DB2EA0009A6F2 /* USMonthButton.h */,
-				D4F911CE1C5DB2EA0009A6F2 /* USMonthButton.m */,
-				D48E44691C5E42F3001171F3 /* USDayButton.h */,
-				D48E446A1C5E42F3001171F3 /* USDayButton.m */,
+				D41F28261C5EEEB600B6F2D0 /* USMonthButtonView.h */,
+				D41F28271C5EEEB600B6F2D0 /* USMonthButtonView.m */,
+				D4D3A14D1C5F0E9600F3B762 /* USDayButtonView.h */,
+				D4D3A14E1C5F0E9600F3B762 /* USDayButtonView.m */,
 			);
 			name = Button;
 			sourceTree = "<group>";
@@ -1095,12 +1095,12 @@
 				D49E87DA1C54EAA6002D1694 /* AFURLConnectionOperation.m in Sources */,
 				D49E88051C54EAA6002D1694 /* RKDynamicMapping.m in Sources */,
 				D49E87E31C54EAA6002D1694 /* MASViewAttribute.m in Sources */,
-				D4F911CF1C5DB2EA0009A6F2 /* USMonthButton.m in Sources */,
 				D49E87E11C54EAA6002D1694 /* MASConstraintMaker.m in Sources */,
 				D4F911C51C5C46560009A6F2 /* USBaseCalendarController.m in Sources */,
 				D49E88181C54EAA6002D1694 /* RKLog.m in Sources */,
 				D487613F1C58F1A300DCE764 /* USEventRule.m in Sources */,
 				D49E87DB1C54EAA6002D1694 /* AFXMLRequestOperation.m in Sources */,
+				D41F28281C5EEEB600B6F2D0 /* USMonthButtonView.m in Sources */,
 				D49E88211C54EAA6002D1694 /* README.md in Sources */,
 				D49E87D71C54EAA6002D1694 /* AFJSONRequestOperation.m in Sources */,
 				D49E88031C54EAA6002D1694 /* RKRouteSet.m in Sources */,
@@ -1121,7 +1121,6 @@
 				D49E88061C54EAA6002D1694 /* RKErrorMessage.m in Sources */,
 				D49E87E51C54EAA6002D1694 /* NSArray+MASAdditions.m in Sources */,
 				D49E88091C54EAA6002D1694 /* RKMapping.m in Sources */,
-				D48E446B1C5E42F3001171F3 /* USDayButton.m in Sources */,
 				D49E87DD1C54EAA6002D1694 /* NSDate+CupertinoYankee.m in Sources */,
 				D49E889C1C555D11002D1694 /* USTimeRowHeader.m in Sources */,
 				D49E88231C54EAA6002D1694 /* LCLNSLog_RK.m in Sources */,
@@ -1135,6 +1134,7 @@
 				D49E88011C54EAA6002D1694 /* RKRoute.m in Sources */,
 				D49E87F41C54EAA6002D1694 /* RKManagedObjectMappingOperationDataSource.m in Sources */,
 				D49E88131C54EAA6002D1694 /* RKValueTransformers.m in Sources */,
+				D4D3A14F1C5F0E9600F3B762 /* USDayButtonView.m in Sources */,
 				D49E88041C54EAA6002D1694 /* RKAttributeMapping.m in Sources */,
 				D49E880D1C54EAA6002D1694 /* RKObjectMappingMatcher.m in Sources */,
 				D49E87F71C54EAA6002D1694 /* RKRelationshipConnectionOperation.m in Sources */,
