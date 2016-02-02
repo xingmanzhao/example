@@ -7,7 +7,6 @@
 //
 
 #import "DemoViewController.h"
-#import "USCollectionViewCalendarLayout.h"
 
 // Collection View Reusable Views
 #import "USGridline.h"
@@ -82,20 +81,21 @@ NSString * const USTimeRowHeaderReuseIdentifier = @"USTimeRowHeaderReuseIdentifi
 
 
 -(void)createMonthView{
-    self.selectedMonthDate = self.selectedDay = [[NSDate date] dateByAddingDays:10];
+    self.selectedMonthDate = self.selectedDay = [NSDate date];
     selectedMonthButtonView = [[USMonthButtonView alloc]initWithFrame:CGRectMake(0, 64, self.monthWidth, self.monthHeight) withIcon:[UIImage imageNamed:@"common_img_arrowDownStroke_normal"]];
     [self.view addSubview:selectedMonthButtonView];
     selectedMonthButtonView.isSelected = NO;
-    [selectedMonthButtonView setBackgroundColor:[[UIColor colorWithHexString:@"eeefef"]  colorWithAlphaComponent:0.8f]];
+    [selectedMonthButtonView setBackgroundColor:[UIColor colorWithHexString:@"eeefef"]];
     
     UITapGestureRecognizer *selectedMonthButtonTapGestureRecognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapGestureRecognizerForSelectedMonthButton:)];
     [selectedMonthButtonView addGestureRecognizer:selectedMonthButtonTapGestureRecognizer];
     
     CGRect selectedMonthViewFrame = CGRectMake(0, CGRectGetMaxY(selectedMonthButtonView.frame) - self.monthHeight * 3, self.monthWidth, self.monthHeight * 3);
     selectedMonthView = [[UIView alloc]initWithFrame:selectedMonthViewFrame];
-    CGFloat borderWidth = ([[UIScreen mainScreen] scale] == 2.0 ? 0.5 : 1.0);
+    CGFloat borderWidth = ([[UIScreen mainScreen] scale] == 2.0 ? 0.5 : 0.5);
     [selectedMonthView.layer setBorderWidth:borderWidth];
     [selectedMonthView.layer setBorderColor:[[UIColor colorWithHexString:@"939393"] colorWithAlphaComponent:0.8f].CGColor];
+//    [selectedMonthView.layer setBorderColor:[UIColor colorWithHexString:@"939393"].CGColor];
     selectedMonthView.alpha = 0;
     [self.view addSubview:selectedMonthView];
 
@@ -110,7 +110,6 @@ NSString * const USTimeRowHeaderReuseIdentifier = @"USTimeRowHeaderReuseIdentifi
         [monthButtonView addGestureRecognizer:monthButtonTapGestureRecognizer];
     }
 }
-
 
 -(void)tapGestureRecognizerForMonthButton:(UIGestureRecognizer*)recognizer{
     CGAffineTransform t = selectedMonthView.transform;
@@ -157,7 +156,7 @@ NSString * const USTimeRowHeaderReuseIdentifier = @"USTimeRowHeaderReuseIdentifi
     }
     
     NSDate *startDate = nil;
-    NSDate *today = [[NSDate date] dateByAddingDays:10];
+    NSDate *today = [NSDate date];
     
     if(today.month == selectedMonth.month){
         startDate = today;
@@ -227,6 +226,9 @@ NSString * const USTimeRowHeaderReuseIdentifier = @"USTimeRowHeaderReuseIdentifi
 }
 
 -(void)tapGestureRecognizerForDayButton:(UIGestureRecognizer*)recognizer{
+    
+    [self tapGestureRecognizerForCalendar:nil];
+    
     UIView *view = recognizer.view;
     for (UIView *subview in view.superview.subviews) {
         USDayButtonView *dayButtonView = (USDayButtonView*)subview;
@@ -272,7 +274,7 @@ NSString * const USTimeRowHeaderReuseIdentifier = @"USTimeRowHeaderReuseIdentifi
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     USEventCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:USEventCellReuseIdentifier forIndexPath:indexPath];
-    
+    NSLog(@"indexPath:%d,%d,%d",indexPath.item,indexPath.row,indexPath.section);
     UIEdgeInsets sectionMargin = self.collectionViewCalendarLayout.sectionMargin;
     cell.hourHeight = self.collectionViewCalendarLayout.hourHeight;
     cell.collectionViewSectionMargin = sectionMargin;
@@ -311,19 +313,18 @@ NSString * const USTimeRowHeaderReuseIdentifier = @"USTimeRowHeaderReuseIdentifi
 
 -(void)initializeCalendar{
     // time selection
-    USCollectionViewCalendarLayout *layout = [[USCollectionViewCalendarLayout alloc]init];
-    self.collectionViewCalendarLayout = layout;
-    layout.sectionLayoutType = USSectionLayoutTypeHorizontalTile;
-    layout.delegate = self;
+    self.calendarLayout = [[USCollectionViewCalendarLayout alloc]init];
+    self.collectionViewCalendarLayout = self.calendarLayout;
+    self.calendarLayout.sectionLayoutType = USSectionLayoutTypeHorizontalTile;
+    self.calendarLayout.delegate = self;
     CGFloat timeSelectedMinY = CGRectGetMaxY(selectedMonthButtonView.frame);
-    self.collectionView = [[UICollectionView alloc]initWithFrame:CGRectMake(0, timeSelectedMinY, kScreenWidth, kScreenHeight - timeSelectedMinY - 60) collectionViewLayout:layout];
+    self.collectionView = [[UICollectionView alloc]initWithFrame:CGRectMake(0, timeSelectedMinY, kScreenWidth, kScreenHeight - timeSelectedMinY - 60) collectionViewLayout:self.calendarLayout];
     self.collectionView.showsVerticalScrollIndicator = NO;
     self.collectionView.showsHorizontalScrollIndicator = NO;
     self.collectionView.delegate =self;
     self.collectionView.dataSource = self;
     [self.view addSubview:self.collectionView];
     
-    [self.collectionView registerClass:[USEventCell class] forCellWithReuseIdentifier:USEventCellReuseIdentifier];
     self.collectionView.backgroundColor = [UIColor whiteColor];
     self.collectionView.scrollEnabled = YES;
     
@@ -346,6 +347,19 @@ NSString * const USTimeRowHeaderReuseIdentifier = @"USTimeRowHeaderReuseIdentifi
     self.eventRuleArray = [NSMutableArray array];
     self.eventOpenningTimeArray = [NSMutableArray array];
     [self createOpenningTime];
+    
+    UITapGestureRecognizer *calendarTapGestureRecognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapGestureRecognizerForCalendar:)];
+    [self.collectionView addGestureRecognizer:calendarTapGestureRecognizer];
+}
+
+-(void)tapGestureRecognizerForCalendar:(UIGestureRecognizer*)recognizer{
+    CGAffineTransform t = selectedMonthView.transform;
+    [UIView animateWithDuration:0.2f animations:^{
+        if(t.ty != 0){
+            selectedMonthView.alpha = 0;
+            selectedMonthView.transform = CGAffineTransformIdentity;
+        }
+    }];
 }
 
 #pragma mark - USCollectionViewCalendarLayout
@@ -465,7 +479,14 @@ NSString * const USTimeRowHeaderReuseIdentifier = @"USTimeRowHeaderReuseIdentifi
 }
 
 - (void)updateSelectedTimeSpan:(NSInteger )startTimeNumber withTimeSpan:(NSInteger)timeSpan{
-    NSLog(@"startNumber:%d, timeSpan:%d",startTimeNumber,timeSpan);
+    self.calendarLayout.cachedSelectedTimeNumber = startTimeNumber;
+    self.calendarLayout.cachedSelectedTimeSpan = timeSpan;
 }
+
+-(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
+    [self.calendarLayout invalidateLayoutCache];
+    [self.collectionView reloadData];
+}
+
 
 @end

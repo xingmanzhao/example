@@ -67,8 +67,6 @@ NSUInteger const USCollectionMinBackgroundZ = 0.0;
 @property(nonatomic,strong) NSMutableDictionary *cachedStartTimeDate;
 @property(nonatomic,strong) NSMutableDictionary *cachedEndTimeDate;
 @property(nonatomic,strong) NSMutableDictionary *cachedDefaultSelectedTimeDate;
-@property(nonatomic,assign) NSInteger cachedDefaultSelectedTimeNumber;
-@property(nonatomic,assign) NSInteger cachedDefaultSelectedTimeSpan;
 
 // Registered Decoration Classes
 @property (nonatomic, strong) NSMutableDictionary *registeredDecorationClasses;
@@ -294,6 +292,23 @@ NSUInteger const USCollectionMinBackgroundZ = 0.0;
         timeRowBodyBackgroundAttributes.hidden = ![orderedTimeSpanData containsObject:[NSNumber numberWithInteger:item]];
     }
     
+//    if(needsToPopulateVerticalGridlineAttributes == YES){
+//        for (NSInteger item = 0; item <= numberOfItemsInSection; item++) {
+//            
+//            NSIndexPath *verticalGridlineIndexPath = [NSIndexPath indexPathForItem:item inSection:0];
+//            UICollectionViewLayoutAttributes *verticalGridlineAttributes = [self layoutAttributesForDecorationViewAtIndexPath:verticalGridlineIndexPath ofKind:USCollectionElementKindVerticalGridline withItemCache:self.verticalGridlineAttributes];
+//            
+//            CGFloat verticalGridlineMinX = nearbyintf(calendarGridMinX - self.verticalGridlineWidth / 2.0);
+//            CGFloat verticalGridlineMinY = self.sectionMargin.top - self.hourHeight / 2.0 + self.hourHeight * item;
+//            CGFloat verticalGridlineHeight = self.hourHeight;
+//            verticalGridlineAttributes.frame = CGRectMake(verticalGridlineMinX, verticalGridlineMinY, self.verticalGridlineWidth, verticalGridlineHeight);
+//            
+//            BOOL isOrdered = [orderedTimeSpanData containsObject:[NSNumber numberWithInteger:item]];
+//            if(isOrdered == YES){
+//            }
+//        }
+//    }
+
     [sectionIndexes enumerateIndexesUsingBlock:^(NSUInteger section, BOOL *stop) {
         if (needsToPopulateVerticalGridlineAttributes) {
             // Vertical Gridline
@@ -321,10 +336,10 @@ NSUInteger const USCollectionMinBackgroundZ = 0.0;
     
             
             CGFloat defaultSelectedTimeMinX = calendarGridMinX;
-            CGFloat defaultSelectedTimeMinY = self.sectionMargin.top + self.cachedDefaultSelectedTimeNumber * self.hourHeight;
+            CGFloat defaultSelectedTimeMinY = self.sectionMargin.top + self.cachedSelectedTimeNumber * self.hourHeight;
             
             CGFloat defaultSelectedTimeWidth = self.calendarGridWidth;
-            CGFloat defaultSelectedTimeHeight = self.cachedDefaultSelectedTimeSpan * self.hourHeight;
+            CGFloat defaultSelectedTimeHeight = self.cachedSelectedTimeSpan * self.hourHeight;
 
             itemAttributes.frame = CGRectMake(defaultSelectedTimeMinX, defaultSelectedTimeMinY, defaultSelectedTimeWidth, defaultSelectedTimeHeight);
 
@@ -343,9 +358,12 @@ NSUInteger const USCollectionMinBackgroundZ = 0.0;
         
         CGFloat horizontalGridlineMinX = calendarGridMinX;
         CGFloat horizontalGridlineMinY = nearbyintf(calendarGridMinY + self.hourHeight * item - self.horizontalGridlineHeight / 2.0);
-        CGFloat horizontalGridlineWidth = self.calendarGridWidth;
+        CGFloat horizontalGridlineWidth = 6.0f;
+        if(item % 2 == 0){
+            horizontalGridlineWidth = self.calendarGridWidth;
+        }
         horizontalGridlineAttributes.frame = CGRectMake(horizontalGridlineMinX, horizontalGridlineMinY, horizontalGridlineWidth, self.horizontalGridlineHeight);
-        horizontalGridlineAttributes.hidden = (item % 2 != 0);
+//        horizontalGridlineAttributes.hidden = (item % 2 != 0);
     }
 }
 
@@ -388,6 +406,7 @@ NSUInteger const USCollectionMinBackgroundZ = 0.0;
 
 - (BOOL)shouldInvalidateLayoutForBoundsChange:(CGRect)newBounds
 {
+    NSLog(@"-------------------------shouldInvalidateLayoutForBoundsChange(x,y,w,h):%f,%f,%f,%f", newBounds.origin.x,newBounds.origin.y,newBounds.size.width,newBounds.size.height);
     // Required for sticky headers
     CGRect oldBounds = self.collectionView.bounds;
     if(CGRectGetWidth(oldBounds) == CGRectGetWidth(newBounds)){
@@ -607,7 +626,7 @@ NSUInteger const USCollectionMinBackgroundZ = 0.0;
     
     // This needs to be a weak reference, otherwise we get a retain cycle
     MSTimerWeakTarget *timerWeakTarget = [[MSTimerWeakTarget alloc] initWithTarget:self selector:@selector(minuteTick:)];
-    self.minuteTimer = [[NSTimer alloc] initWithFireDate:nextMinuteBoundary interval:60 target:timerWeakTarget selector:timerWeakTarget.fireSelector userInfo:nil repeats:YES];
+    self.minuteTimer = [[NSTimer alloc] initWithFireDate:nextMinuteBoundary interval:5 target:timerWeakTarget selector:timerWeakTarget.fireSelector userInfo:nil repeats:YES];
     [[NSRunLoop currentRunLoop] addTimer:self.minuteTimer forMode:NSDefaultRunLoopMode];
     
     // Added
@@ -616,8 +635,8 @@ NSUInteger const USCollectionMinBackgroundZ = 0.0;
     self.cachedEndTimeDate = [NSMutableDictionary new];
     self.cachedDefaultSelectedTimeDate = [NSMutableDictionary new];
     
-    self.cachedDefaultSelectedTimeNumber = 2;
-    self.cachedDefaultSelectedTimeSpan = 4;
+    self.cachedSelectedTimeNumber = 2;
+    self.cachedSelectedTimeSpan = 4;
 }
 
 #pragma mark Minute Updates
@@ -627,7 +646,7 @@ NSUInteger const USCollectionMinBackgroundZ = 0.0;
     NSLog(@"-------------------------minuteTick");
     // Invalidate cached current date componets (since the minute's changed!)
 //    [self.cachedCurrentDateComponents removeAllObjects];
-    [self invalidateLayout];
+//    [self invalidateLayout];
 }
 
 #pragma mark Z Index

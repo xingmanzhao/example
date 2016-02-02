@@ -17,7 +17,7 @@
         self.backgroundColor = [UIColor clearColor];
         self.title = [UILabel new];
         self.title.backgroundColor = [UIColor clearColor];
-       CGFloat titleFontOfSize = (([[UIScreen mainScreen] scale] == 2.0) ? 10.0 : 13.0);
+       CGFloat titleFontOfSize = (([[UIScreen mainScreen] scale] == 2.0) ? 11.0 : 13.0);
         self.title.font = [UIFont boldSystemFontOfSize:titleFontOfSize];
         [self.title setTextColor:[UIColor colorWithHexString:@"aaaaaa"]];
         [self.title setTextAlignment: NSTextAlignmentRight];
@@ -45,7 +45,7 @@
     NSCalendar *gregorianCalender = [[NSCalendar alloc]initWithCalendarIdentifier:NSGregorianCalendar];
     NSDateComponents *comp = [gregorianCalender components:NSHourCalendarUnit | NSMinuteCalendarUnit fromDate:time];
     if(comp.minute == 0){
-        dateFormatter.dateFormat = @"h a";
+        dateFormatter.dateFormat = @"H:mm";
     }else{
         dateFormatter.dateFormat = @":mm";
     }

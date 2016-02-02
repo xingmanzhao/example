@@ -34,6 +34,8 @@
         [self updateColorsOrdered];
     }
     
+     
+    
     // Cell width , height
     CGFloat widthForCell = self.bounds.size.width;
     CGFloat heightForCell = self.bounds.size.height;
@@ -49,7 +51,8 @@
     topDragButton = [[UIButton alloc]initWithFrame:CGRectMake(xForTopButton , yForTopButton, widthForButton, heightForButton)];
     [topDragButton setTitle:@"" forState:UIControlStateNormal];
     [topDragButton setBackgroundColor:[UIColor whiteColor]];
-    [topDragButton.layer setBorderColor:[UIColor colorWithHexString:@"e9466b"].CGColor];
+//    [topDragButton.layer setBorderColor:[UIColor colorWithHexString:@"e9466b"].CGColor];
+    [topDragButton.layer setBorderColor:[self dragButtonBorderColorOrdered:self.isOrdered].CGColor];
     [topDragButton.layer setBorderWidth:2.0f];
     [topDragButton.layer setCornerRadius:topDragButton.bounds.size.width / 2];
     [self addSubview:topDragButton];
@@ -72,7 +75,8 @@
     bottomDragButton = [[UIButton alloc]initWithFrame:CGRectMake(xForBottomButton , yForBottomButton, widthForButton, heightForButton)];
     [bottomDragButton setTitle:@"" forState:UIControlStateNormal];
     [bottomDragButton setBackgroundColor:[UIColor whiteColor]];
-    [bottomDragButton.layer setBorderColor:[UIColor colorWithHexString:@"e9466b"].CGColor];
+//    [bottomDragButton.layer setBorderColor:[UIColor colorWithHexString:@"e9466b"].CGColor];
+    [bottomDragButton.layer setBorderColor:[self dragButtonBorderColorOrdered:self.isOrdered].CGColor];
     [bottomDragButton.layer setBorderWidth:2.0f];
     [bottomDragButton.layer setCornerRadius:bottomDragButton.bounds.size.width / 2];
     [self addSubview:bottomDragButton];
@@ -175,11 +179,13 @@
 }
 
 - (void)updateColorsSelected{
-    self.contentView.backgroundColor = [self backgroundColorHighlighted:self.isSelected];
-    if(topLayer){
-        [topLayer setBackgroundColor:[self borderColorOrdered:NO].CGColor];
+    if(self.isOrdered == NO){
+        self.contentView.backgroundColor = [self backgroundColorHighlighted:self.isSelected];
+        if(topLayer){
+            [topLayer setBackgroundColor:[self borderColorOrdered:NO].CGColor];
+        }
+        [self setNeedsLayout];
     }
-    [self setNeedsLayout];
 }
 
 - (NSDictionary *)titleAttributesHighlighted:(BOOL)highlighted{
@@ -208,25 +214,26 @@
 
 - (UIColor *)backgroundColorHighlighted:(BOOL)selected{
     //item选中时的颜色
-//    return selected ? [[UIColor colorWithHexString:@"32a46a"]  colorWithAlphaComponent:0.8]: [[UIColor colorWithHexString:@"63c191"] colorWithAlphaComponent:0.6];
-    return selected ? [[UIColor colorWithHexString:@"e9466b"]  colorWithAlphaComponent:0.8]: [[UIColor colorWithHexString:@"e9466b"] colorWithAlphaComponent:0.6];
+    return selected ? [[UIColor colorWithHexString:@"63c191"]  colorWithAlphaComponent:0.9]: [[UIColor colorWithHexString:@"63c191"] colorWithAlphaComponent:0.5];
+//    return selected ? [[UIColor colorWithHexString:@"e9466b"]  colorWithAlphaComponent:0.8]: [[UIColor colorWithHexString:@"e9466b"] colorWithAlphaComponent:0.6];
 }
 
 - (UIColor *)backgroundColorOrdered:(BOOL)ordered{
     //item选中时的颜色
-//    return ordered ? [[UIColor colorWithHexString:@"ec8788"] colorWithAlphaComponent:0.8] : [[UIColor colorWithHexString:@"63c191"] colorWithAlphaComponent:0.6];
-    return ordered ? [[UIColor colorWithHexString:@"595959"] colorWithAlphaComponent:0.5] : [[UIColor colorWithHexString:@"e9466b"] colorWithAlphaComponent:0.6];
+    return ordered ? [[UIColor colorWithHexString:@"ec8788"] colorWithAlphaComponent:0.8] : [[UIColor colorWithHexString:@"63c191"] colorWithAlphaComponent:0.5];
+//    return ordered ? [[UIColor colorWithHexString:@"595959"] colorWithAlphaComponent:0.5] : [[UIColor colorWithHexString:@"e9466b"] colorWithAlphaComponent:0.6];
 }
 
 - (UIColor *)dragButtonBorderColorOrdered:(BOOL)ordered{
     //item选中时的颜色
-    return ordered ? [UIColor colorWithHexString:@"595959"] : [UIColor colorWithHexString:@"e9466b"];
+        return ordered ? [UIColor colorWithHexString:@"ec8788"] : [UIColor colorWithHexString:@"63c191"];
+    //    return ordered ? [UIColor colorWithHexString:@"595959"] : [UIColor colorWithHexString:@"e9466b"];
 }
 
 - (UIColor *)borderColorOrdered:(BOOL)ordered{
     //item选中时的颜色
-//    return ordered ? [[UIColor colorWithHexString:@"e35354"]  colorWithAlphaComponent:0.8] : [[UIColor colorWithHexString:@"1fa561"]  colorWithAlphaComponent:0.6];
-    return ordered ? [[UIColor colorWithHexString:@"595959"]  colorWithAlphaComponent:0.5] : [[UIColor colorWithHexString:@"e9466b"]  colorWithAlphaComponent:0.6];
+    return ordered ? [UIColor colorWithHexString:@"ec8788"] : [UIColor colorWithHexString:@"63c191"];
+//    return ordered ? [[UIColor colorWithHexString:@"595959"]  colorWithAlphaComponent:0.5] : [[UIColor colorWithHexString:@"e9466b"]  colorWithAlphaComponent:0.6];
 }
 
 - (UIColor *)textColorHighlighted:(BOOL)selected{
@@ -273,7 +280,7 @@
         translationY = -translationPoint.y;
         CGFloat currentHeight = CGRectGetHeight(currentFrame) + translationY;
         CGFloat currentMinY = CGRectGetMinY(currentFrame) + translationY;
-        NSLog(@"%f,%f",currentMinY,self.topGuideline);
+
         if(currentHeight >= self.hourHeight * 2 && currentMinY >= self.topGuideline){
             CGRect newFrame = CGRectMake(CGRectGetMinX(currentFrame), CGRectGetMinY(currentFrame) -  translationY, CGRectGetWidth(currentFrame),currentHeight);
             superView.frame = newFrame;
@@ -340,10 +347,12 @@
             if([self.superview isKindOfClass:[UICollectionView class]] == YES){
                 UICollectionView *collectionView = (UICollectionView*)self.superview;
                  CGPoint currentOffsetPoint = collectionView.contentOffset;
+                
+                CGSize contentSize= collectionView.contentSize;
                 CGFloat contentOffsetY = currentMaxY - CGRectGetHeight(collectionView.frame) - currentOffsetPoint.y;
-                if(contentOffsetY > 0){
+                if(contentOffsetY > 0 && contentOffsetY < (contentSize.height - CGRectGetHeight(collectionView.frame)) ){
                     contentOffsetY += currentOffsetPoint.y;
-                    [collectionView setContentOffset:CGPointMake(0, contentOffsetY) animated:YES];
+                    [collectionView setContentOffset:CGPointMake(0, contentOffsetY * 1.3) animated:YES];
                 }
             }
         }
@@ -416,20 +425,14 @@
                 if(topOffsetY <0){
                     [collectionView setContentOffset:CGPointMake(0, currentMinY) animated:YES];
                 }
-                
+                CGSize contentSize= collectionView.contentSize;
                 CGFloat bottomOffsetY = currentMaxY - CGRectGetHeight(collectionView.frame) - currentOffsetPoint.y;
-                if(bottomOffsetY > 0){
+                if(bottomOffsetY > 0 && bottomOffsetY < (contentSize.height - CGRectGetHeight(collectionView.frame)) ){
                     bottomOffsetY += currentOffsetPoint.y;
-                    [collectionView setContentOffset:CGPointMake(0, bottomOffsetY) animated:YES];
+                    [collectionView setContentOffset:CGPointMake(0, bottomOffsetY * 1.3) animated:YES];
                 }
             }
         }
-        
-//        if(currentMaxY > CGRectGetMaxY(superView.frame)){
-//            UICollectionView *collectionView = (UICollectionView*)superView;
-//            NSIndexPath *indexPath = [NSIndexPath indexPathForItem:20 inSection:0];
-//            [collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionBottom animated:YES];
-//        }
     }
     
     [recognizer setTranslation:CGPointZero inView:superView];
@@ -438,13 +441,11 @@
 -(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
     self.selected = YES;
     [self updateColorsSelected];
-    NSLog(@"touchesBegan");
 }
 
 -(void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
     self.selected = NO;
     [self updateColorsSelected];
-    NSLog(@"touchesEnded");
 }
 
 // Selected Time Span

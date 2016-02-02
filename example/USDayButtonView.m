@@ -27,7 +27,7 @@
         
         weekLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, weekLabelMinY, labelWidth, weekLabelHeight)];
         [weekLabel setText:@""];
-        CGFloat weekFontOfSize = (([[UIScreen mainScreen] scale] == 2.0) ? 12.0 : 16.0);
+        CGFloat weekFontOfSize = (([[UIScreen mainScreen] scale] == 2.0) ? 10.0 : 12.0);
         [weekLabel setFont:[UIFont systemFontOfSize:weekFontOfSize]];
         [weekLabel setTextAlignment:NSTextAlignmentCenter];
         [self addSubview:weekLabel];
@@ -36,28 +36,28 @@
         dayLabel = [[UILabel alloc]initWithFrame:CGRectMake(CGRectGetMinX(weekFrame), CGRectGetMaxY(weekFrame), labelWidth, CGRectGetHeight(weekFrame))];
         [dayLabel setText:@""];
         
-        CGFloat dayFontOfSize = (([[UIScreen mainScreen] scale] == 2.0) ? 18.0 : 24.0);
+        CGFloat dayFontOfSize = (([[UIScreen mainScreen] scale] == 2.0) ? 14.0 : 20.0);
         [dayLabel setFont:[UIFont systemFontOfSize:dayFontOfSize]];
         [dayLabel setTextAlignment:NSTextAlignmentCenter];
         [self addSubview:dayLabel];
         
         CGFloat scale = [[UIScreen mainScreen] scale];
-        CGFloat topLayerHeight = (scale == 2.0 ? 0.5f : 1.0f);
+        CGFloat topLayerHeight = (scale == 2.0 ? 0.5f : 0.5f);
         CGRect topLayerBounds = CGRectMake(0, 0, self.bounds.size.width, topLayerHeight);
         CGPoint topLayerPosition = CGPointMake(0, 0);
         [self addBorderBounds:topLayerBounds withPosition:topLayerPosition];
         
-        CGFloat bottomLayerHeight = (scale == 2.0 ? 0.5f : 1.0f);
+        CGFloat bottomLayerHeight = (scale == 2.0 ? 0.5f : 0.5f);
         CGRect bottomLayerBounds = CGRectMake(0, self.bounds.size.height - 1.0, self.bounds.size.width, bottomLayerHeight);
         CGPoint bottomLayerPosition = CGPointMake(0, self.bounds.size.height - bottomLayerHeight);
         [self addBorderBounds:bottomLayerBounds withPosition:bottomLayerPosition];
         
-        CGFloat leftLayerWidth = (scale == 2.0 ? 0.25f : 0.5f);
+        CGFloat leftLayerWidth = (scale == 2.0 ? 0.25f : 0.25f);
         CGRect leftLayerBounds = CGRectMake(0, 0, leftLayerWidth, self.bounds.size.height);
         CGPoint leftLayerPosition = CGPointMake(0, 0);
         [self addBorderBounds:leftLayerBounds withPosition:leftLayerPosition];
         
-        CGFloat rightLayerWidth = (scale == 2.0 ? 0.25f : 0.5f);
+        CGFloat rightLayerWidth = (scale == 2.0 ? 0.25f : 0.25f);
         CGRect rightLayerBounds = CGRectMake(self.bounds.size.width - rightLayerWidth, 0, rightLayerWidth, self.bounds.size.height);
         CGPoint rightLayerPosition = CGPointMake(self.bounds.size.width - rightLayerWidth, 0);
         [self addBorderBounds:rightLayerBounds withPosition:rightLayerPosition];
@@ -71,7 +71,6 @@
     [border setBounds:bounds];
     [border setPosition:position];
     [border setAnchorPoint:CGPointZero];
-    [border setCornerRadius:2.0f];
     [self.layer addSublayer:border];
 }
 

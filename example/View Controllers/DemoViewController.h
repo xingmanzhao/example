@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "USCollectionViewCalendarLayout.h"
 
 @interface DemoViewController : UIViewController
 @property(nonatomic,assign) NSInteger numberOfMonthForSelected;
@@ -24,5 +25,7 @@
 @property(nonatomic,strong) NSMutableDictionary *cachedOrderedTimeSpanData;
 @property(nonatomic,strong) NSMutableArray *eventRuleArray;
 @property(nonatomic,strong) NSMutableArray *eventOpenningTimeArray;
+@property(nonatomic,strong) USCollectionViewCalendarLayout *calendarLayout;
+
 
 @end

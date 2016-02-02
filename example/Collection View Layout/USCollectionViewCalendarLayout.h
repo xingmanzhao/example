@@ -50,6 +50,9 @@ typedef NS_ENUM(NSUInteger, USHeaderLayoutType) {
 @property(nonatomic,assign) CGFloat topGuideline;
 @property(nonatomic,assign) CGFloat bottomGuideline;
 
+@property(nonatomic,assign) NSInteger cachedSelectedTimeNumber;
+@property(nonatomic,assign) NSInteger cachedSelectedTimeSpan;
+
 -(NSDate*)dateForTimeRowHeaderAtIndexPath:(NSIndexPath*)indexPath;
 -(void)invalidateLayoutCache;
 

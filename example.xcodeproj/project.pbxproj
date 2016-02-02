@@ -17,6 +17,7 @@
 		D40179151C53B55E0063A23E /* exampleUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = D40179141C53B55E0063A23E /* exampleUITests.m */; };
 		D41F28281C5EEEB600B6F2D0 /* USMonthButtonView.m in Sources */ = {isa = PBXBuildFile; fileRef = D41F28271C5EEEB600B6F2D0 /* USMonthButtonView.m */; };
 		D43D12131C560DED001EF40D /* USTimeRowBodyBackground.m in Sources */ = {isa = PBXBuildFile; fileRef = D43D12121C560DED001EF40D /* USTimeRowBodyBackground.m */; };
+		D47CA1611C60ABFE007AF113 /* USVerticalGridline.m in Sources */ = {isa = PBXBuildFile; fileRef = D47CA1601C60ABFE007AF113 /* USVerticalGridline.m */; };
 		D487613F1C58F1A300DCE764 /* USEventRule.m in Sources */ = {isa = PBXBuildFile; fileRef = D487613E1C58F1A300DCE764 /* USEventRule.m */; };
 		D48E44671C5E3D97001171F3 /* NSDate+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = D48E44641C5E3D97001171F3 /* NSDate+Utilities.m */; };
 		D49E87D41C54EAA6002D1694 /* AFHTTPClient.m in Sources */ = {isa = PBXBuildFile; fileRef = D49E86FF1C54EAA6002D1694 /* AFHTTPClient.m */; };
@@ -159,6 +160,8 @@
 		D41F28271C5EEEB600B6F2D0 /* USMonthButtonView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = USMonthButtonView.m; sourceTree = "<group>"; };
 		D43D12111C560DED001EF40D /* USTimeRowBodyBackground.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = USTimeRowBodyBackground.h; path = "Collection View Reusable Views/USTimeRowBodyBackground.h"; sourceTree = "<group>"; };
 		D43D12121C560DED001EF40D /* USTimeRowBodyBackground.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = USTimeRowBodyBackground.m; path = "Collection View Reusable Views/USTimeRowBodyBackground.m"; sourceTree = "<group>"; };
+		D47CA15F1C60ABFE007AF113 /* USVerticalGridline.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = USVerticalGridline.h; path = "Collection View Reusable Views/USVerticalGridline.h"; sourceTree = "<group>"; };
+		D47CA1601C60ABFE007AF113 /* USVerticalGridline.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = USVerticalGridline.m; path = "Collection View Reusable Views/USVerticalGridline.m"; sourceTree = "<group>"; };
 		D487613D1C58F1A300DCE764 /* USEventRule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = USEventRule.h; path = example/Model/USEventRule.h; sourceTree = SOURCE_ROOT; };
 		D487613E1C58F1A300DCE764 /* USEventRule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = USEventRule.m; path = example/Model/USEventRule.m; sourceTree = SOURCE_ROOT; };
 		D48E44631C5E3D97001171F3 /* NSDate+Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+Utilities.h"; sourceTree = "<group>"; };
@@ -890,6 +893,8 @@
 				D49E88961C555D11002D1694 /* USTimeRowHeaderBackground.m */,
 				D43D12111C560DED001EF40D /* USTimeRowBodyBackground.h */,
 				D43D12121C560DED001EF40D /* USTimeRowBodyBackground.m */,
+				D47CA15F1C60ABFE007AF113 /* USVerticalGridline.h */,
+				D47CA1601C60ABFE007AF113 /* USVerticalGridline.m */,
 			);
 			name = "Collection View Reusable Views";
 			sourceTree = "<group>";
@@ -1065,6 +1070,7 @@
 				D49E88291C54EAA6002D1694 /* TKStateMachine.m in Sources */,
 				D49E88281C54EAA6002D1694 /* TKState.m in Sources */,
 				D40178F71C53B55E0063A23E /* ViewController.m in Sources */,
+				D47CA1611C60ABFE007AF113 /* USVerticalGridline.m in Sources */,
 				D4F911C21C5C462C0009A6F2 /* USMonthController.m in Sources */,
 				D49E885B1C5557B2002D1694 /* USEventCell.m in Sources */,
 				D49E88121C54EAA6002D1694 /* RKRelationshipMapping.m in Sources */,

@@ -26,21 +26,19 @@
         yearLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, yearLabelMinY, CGRectGetWidth(frame), yearLabelHeight)];
         
         [yearLabel setText:@""];
-        CGFloat yearFontOfSize = (([[UIScreen mainScreen] scale] == 2.0) ? 12.0 : 16.0);
+        CGFloat yearFontOfSize = (([[UIScreen mainScreen] scale] == 2.0) ? 10.0 : 12.0);
         [yearLabel setFont:[UIFont systemFontOfSize:yearFontOfSize]];
         [yearLabel setTextAlignment:NSTextAlignmentCenter];
-//        [yearLabel setTextColor:[UIColor redColor]];
         [self addSubview:yearLabel];
         
         monthLabel = [[UILabel alloc]initWithFrame:CGRectMake(CGRectGetMinX(yearLabel.frame), CGRectGetMaxY(yearLabel.frame), CGRectGetWidth(yearLabel.frame), CGRectGetHeight(yearLabel.frame))];
         [monthLabel setText:@""];
         CGFloat monthFontOfSize = (([[UIScreen mainScreen] scale] == 2.0) ? 20.0 : 24.0);
-        [monthLabel setFont:[UIFont boldSystemFontOfSize:monthFontOfSize]];
+        [monthLabel setFont:[UIFont systemFontOfSize:monthFontOfSize]];
         [monthLabel setTextAlignment:NSTextAlignmentCenter];
-//        [yearLabel setTextColor:[UIColor blueColor]];
         [self addSubview:monthLabel];
         
-        CGFloat borderWidth = ([[UIScreen mainScreen] scale] == 2.0 ? 0.4 : 0.8);
+        CGFloat borderWidth = ([[UIScreen mainScreen] scale] == 2.0 ? 0.25 : 0.5);
         [self.layer setBorderColor:[[UIColor colorWithHexString:@"939393"] colorWithAlphaComponent:0.8f].CGColor];
         [self.layer setBorderWidth:borderWidth];
     }
@@ -50,7 +48,7 @@
 -(id)initWithFrame:(CGRect)frame withIcon:(UIImage*)icon{
     self = [super initWithFrame:frame];
     if(self){
-        UIEdgeInsets contentEdgeInsets = UIEdgeInsetsMake(2, 0, 0, 0);
+        UIEdgeInsets contentEdgeInsets = UIEdgeInsetsMake(4, 0, 0, 0);
         
         CGFloat labelWidth = CGRectGetWidth(frame);
         CGFloat yearLabelMinY = contentEdgeInsets.top;
@@ -59,7 +57,7 @@
         
         yearLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, yearLabelMinY, labelWidth, yearLabelHeight)];
         [yearLabel setText:@""];
-        CGFloat yearFontOfSize = (([[UIScreen mainScreen] scale] == 2.0) ? 12.0 : 16.0);
+        CGFloat yearFontOfSize = (([[UIScreen mainScreen] scale] == 2.0) ? 10.0 : 12.0);
         [yearLabel setFont:[UIFont systemFontOfSize:yearFontOfSize]];
         [yearLabel setTextAlignment:NSTextAlignmentCenter];
         [self addSubview:yearLabel];
@@ -67,12 +65,12 @@
         monthLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(yearLabel.frame), labelWidth, monthLabelHeight)];
         [monthLabel setText:@""];
         CGFloat monthFontOfSize = (([[UIScreen mainScreen] scale] == 2.0) ? 20.0 : 24.0);
-        [monthLabel setFont:[UIFont boldSystemFontOfSize:monthFontOfSize]];
+        [monthLabel setFont:[UIFont systemFontOfSize:monthFontOfSize]];
         [monthLabel setTextAlignment:NSTextAlignmentCenter];
         [self addSubview:monthLabel];
         
         CGFloat iconWidth = 20 / 2;
-        CGFloat iconHeight = 14 / 2;
+        CGFloat iconHeight = 12 / 2;
         CGFloat iconMinX = (labelWidth - iconWidth) / 2;
         UIImageView *imageView = [[UIImageView alloc]initWithFrame:CGRectMake(iconMinX, CGRectGetMaxY(monthLabel.frame), iconWidth, iconHeight)];
         if(icon){
@@ -94,7 +92,8 @@
 
 -(void)setIsSelected:(BOOL)isSelected{
     _isSelected = isSelected;
-    self.backgroundColor = [[self backgroundHighlightColor] colorWithAlphaComponent:0.8];
+    self.backgroundColor = [self backgroundHighlightColor];
+//    self.backgroundColor = [[self backgroundHighlightColor] colorWithAlphaComponent:0.8];
     [yearLabel setTextColor:[self foregroundHightColor]];
     [monthLabel setTextColor:[self foregroundHightColor]];
     [self setNeedsDisplay];
